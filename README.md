@@ -27,3 +27,7 @@ npm i react-router-dom
 # Dependencias para conectar con springboot
 
 npm i axios
+
+# Dependencias para modales en react
+
+npm install react-modal

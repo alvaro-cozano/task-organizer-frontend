@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { springApi } from "../api";
-import { clearErrorMessage, onChecking, onLogin, onLogout } from "../store";
+import { clearErrorMessage, onChecking, onLogin, onLogout, onLogoutBoards } from "../store";
 import { RootState, AppDispatch } from "../store/store";
 import { useNavigate } from "react-router";
 
@@ -56,6 +56,10 @@ export const useAuthStore = () => {
   };
 
   const checkAuthToken = async (): Promise<void> => {
+    if (status === 'not-authenticated') {
+      console.log('El usuario no está autenticado, no ejecutando checkAuthToken.');
+      return;
+    }
     const token = localStorage.getItem('token');
     if (!token) {
       dispatch(onLogout());
@@ -82,6 +86,7 @@ export const useAuthStore = () => {
 
   const startLogout = (): void => {
     localStorage.clear();
+    dispatch( onLogoutBoards() );
     dispatch(onLogout());
   };
 

@@ -10,8 +10,8 @@ const springApi = axios.create({
 springApi.interceptors.request.use((config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
   const token = localStorage.getItem('token') || '';
 
-  if (config.headers && typeof config.headers.set === 'function') {
-    config.headers.set('x-token', token);
+  if (config.headers) {
+    config.headers['Authorization'] = `Bearer ${token}`;
   }
 
   return config;

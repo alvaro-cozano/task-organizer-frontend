@@ -2,14 +2,18 @@ import { Route, Routes, Navigate } from "react-router-dom"
 import { useEffect } from "react";
 import { useAuthStore } from "../hooks/useAuthStore";
 import { AuthRoutes } from "../auth/routes/AuthRoutes";
+import { OrganizerPage } from "../management/organizer/pages/OrganizerPage";
 
 export const AppRouter = () => {
 
     const  { status, checkAuthToken } = useAuthStore();
 
     useEffect(() => {
-        checkAuthToken();
-    }, [checkAuthToken])
+        if (status === 'checking') {
+            checkAuthToken();
+        }
+    }, [status, checkAuthToken]);
+    
     
 
     if ( status === 'checking' ) {
@@ -30,6 +34,7 @@ export const AppRouter = () => {
                 )
                 : (
                     <>
+                        <Route path="/" element={<OrganizerPage />}/>
                         <Route path="*" element={<Navigate to="/" />}/>
                     </>
                 )
