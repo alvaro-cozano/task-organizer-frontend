@@ -2,7 +2,8 @@ import { Route, Routes, Navigate } from "react-router-dom"
 import { useEffect } from "react";
 import { useAuthStore } from "../hooks/useAuthStore";
 import { AuthRoutes } from "../auth/routes/AuthRoutes";
-import { OrganizerPage } from "../management/organizer/pages/OrganizerPage";
+import { BoardPage } from "../management/organizer/pages/BoardPage";
+import CardPage from "../management/organizer/pages/CardPage";
 
 export const AppRouter = () => {
 
@@ -34,7 +35,8 @@ export const AppRouter = () => {
                 )
                 : (
                     <>
-                        <Route path="/" element={<OrganizerPage />}/>
+                        <Route path="/" element={<BoardPage />}/>
+                        <Route path="/cards/:boardId" element={<CardPage />} />
                         <Route path="*" element={<Navigate to="/" />}/>
                     </>
                 )

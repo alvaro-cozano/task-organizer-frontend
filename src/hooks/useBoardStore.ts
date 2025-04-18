@@ -6,7 +6,7 @@ import {
     onLoadboards,
     onSetActiveBoard,
     onUpdateBoard,
-} from '../store/board/boardSlice';
+} from '../store/organizer/boardSlice';
 import { springApi } from '../api';
 import Swal from 'sweetalert2';
 

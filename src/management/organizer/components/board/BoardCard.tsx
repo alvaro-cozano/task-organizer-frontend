@@ -1,14 +1,5 @@
-import { useBoardStore } from '../../../hooks/useBoardStore';
-
-export interface UserReferenceDTO {
-    email: string;
-}
-
-export interface BoardDTO {
-    id: number;
-    boardName: string;
-    users: UserReferenceDTO[];
-}
+import { useBoardStore } from '../../../../hooks/useBoardStore';
+import { BoardDTO } from '../../types/BoardDTO';
 
 interface Props {
     board: BoardDTO;

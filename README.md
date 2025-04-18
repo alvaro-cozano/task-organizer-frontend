@@ -31,3 +31,8 @@ npm i axios
 # Dependencias para modales en react
 
 npm install react-modal
+
+# Dependencias para las fechas
+
+npm install date-fns
+npm i react-datepicker

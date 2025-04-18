@@ -1,5 +1,5 @@
 export * from './auth/authSlice';
 
-export * from './board/boardSlice';
+export * from './organizer/boardSlice';
 
 export * from './store';
