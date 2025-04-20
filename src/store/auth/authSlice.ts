@@ -2,8 +2,11 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface AuthState {
   status: 'checking' | 'authenticated' | 'not-authenticated';
-  user: { username: string;} | null; // Cambié user para ser null o el tipo adecuado
-  errorMessage: string | undefined; // errorMessage debe ser un string o undefined
+  user: { 
+    username: string;
+    email: string;
+  } | null;
+  errorMessage: string | undefined;
 }
 
 const initialState: AuthState = {
@@ -19,7 +22,7 @@ const authSlice = createSlice({
     onChecking: (state) => {
       state.status = 'checking';
     },
-    onLogin: (state, action: PayloadAction<{ username: string }>) => {
+    onLogin: (state, action: PayloadAction<{ username: string; email: string  }>) => {
       state.status = 'authenticated';
       state.user = action.payload;
       state.errorMessage = undefined;

@@ -1,8 +1,10 @@
 import { useEffect, FormEvent, ChangeEvent } from 'react';
-import Swal from 'sweetalert2';
-import { useAuthStore, useForm } from '../../hooks';
+
 import { Link as RouterLink } from 'react-router-dom';
 import { Link } from "@mui/material"
+import Swal from 'sweetalert2';
+
+import { useAuthStore, useForm } from '../../hooks';
 
 import './AuthPage.css';
 
@@ -50,7 +52,7 @@ export const LoginPage = () => {
               <input
                 type="text"
                 className="form-control"
-                placeholder="Correo"
+                placeholder="Introduzca su usuario o correo"
                 name="loginEmail"
                 value={loginEmail}
                 onChange={onLoginInputChange}
@@ -60,7 +62,7 @@ export const LoginPage = () => {
               <input
                 type="password"
                 className="form-control"
-                placeholder="Contraseña"
+                placeholder="Introduzca su contraseña"
                 name="loginPassword"
                 value={loginPassword}
                 onChange={onLoginInputChange}

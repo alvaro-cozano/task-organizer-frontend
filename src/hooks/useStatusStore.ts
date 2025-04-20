@@ -1,16 +1,17 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../store';
-import { StatusDTO } from '../management/organizer/types/StatusDTO';
+import Swal from 'sweetalert2';
+
+import { springApi } from '../api';
+import { StatusDTO } from '../management';
 import {
+  RootState,
   setStatuses,
   addStatus,
   updateStatus,
   deleteStatus,
   setLoading,
   setError
-} from '../store/organizer/statusSlice';
-import { springApi } from '../api';
-import Swal from 'sweetalert2';
+} from '../store';
 
 export const useStatusStore = () => {
   const dispatch = useDispatch();
@@ -37,7 +38,6 @@ export const useStatusStore = () => {
       dispatch(addStatus(data));
     } catch (err: any) {
       console.log(err);
-      // Maneja el error y muestra la alerta personalizada
       const errorMessage = err?.response?.data?.message || 'Ya existe un estado con ese nombre en este tablero';
       Swal.fire({
         icon: 'error',
@@ -56,7 +56,6 @@ export const useStatusStore = () => {
       dispatch(updateStatus(data));
     } catch (err: any) {
       console.log(err);
-      // Maneja el error y muestra la alerta personalizada
       const errorMessage = err?.response?.data?.message || 'Ya existe un estado con ese nombre en este tablero';
       Swal.fire({
         icon: 'error',

@@ -1,8 +1,15 @@
-import { useDispatch, useSelector } from "react-redux";
-import { springApi } from "../api";
-import { clearErrorMessage, onChecking, onLogin, onLogout, onLogoutBoards } from "../store";
-import { RootState, AppDispatch } from "../store/store";
 import { useNavigate } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+
+import { springApi } from "../api";
+import { 
+  clearErrorMessage, 
+  onChecking, 
+  onLogin, 
+  onLogout,
+  RootState, 
+  AppDispatch 
+} from "../store";
 
 interface LoginForm {
   email: string;
@@ -20,6 +27,7 @@ interface RegisterForm {
 interface AuthResponse {
   token: string;
   username: string;
+  email: string;
 }
 
 export const useAuthStore = () => {
@@ -33,7 +41,7 @@ export const useAuthStore = () => {
       const { data } = await springApi.post<AuthResponse>('/login', { email, password });
       localStorage.setItem('token', data.token);
       localStorage.setItem('token-init-date', new Date().getTime().toString());
-      dispatch(onLogin({ username: data.username }));
+      dispatch(onLogin({ username: data.username, email: data.email }));
     } catch (error: any) {
       dispatch(onLogout('Credenciales incorrectas'));
       setTimeout(() => {
@@ -76,7 +84,7 @@ export const useAuthStore = () => {
   
       localStorage.setItem('token', data.token);
       localStorage.setItem('token-init-date', new Date().getTime().toString());
-      dispatch(onLogin({ username: data.username }));
+      dispatch(onLogin({ username: data.username, email: data.email }));
     } catch (error) {
       console.error('Error al renovar el token:', error);
       localStorage.clear();
@@ -86,7 +94,6 @@ export const useAuthStore = () => {
 
   const startLogout = (): void => {
     localStorage.clear();
-    dispatch( onLogoutBoards() );
     dispatch(onLogout());
   };
 

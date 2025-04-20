@@ -1,7 +1,8 @@
-// StatusModal.tsx
-import { useEffect, useState } from "react";
-import { useStatusStore } from "../../../../hooks/useStatusStore";
-import { StatusDTO } from "../../types/StatusDTO";
+import { useEffect, useState, useCallback } from "react";
+import Swal from "sweetalert2";
+
+import { useStatusStore } from "../../../../hooks";
+import { StatusDTO } from "../../../../management";
 
 interface StatusModalProps {
   isOpen: boolean;
@@ -11,8 +12,14 @@ interface StatusModalProps {
   statusToEdit: StatusDTO | null;
 }
 
-const StatusModal: React.FC<StatusModalProps> = ({ isOpen, closeModal, boardId, statuses = [], statusToEdit }) => {
-  const [statusName, setStatusName] = useState('');
+const StatusModal: React.FC<StatusModalProps> = ({
+  isOpen,
+  closeModal,
+  boardId,
+  statuses = [],
+  statusToEdit,
+}) => {
+  const [statusName, setStatusName] = useState("");
   const [editingStatus, setEditingStatus] = useState<StatusDTO | null>(null);
 
   const { createStatus, modifyStatus, removeStatus, loadStatuses } = useStatusStore();
@@ -22,37 +29,42 @@ const StatusModal: React.FC<StatusModalProps> = ({ isOpen, closeModal, boardId, 
       setEditingStatus(statusToEdit);
       setStatusName(statusToEdit.name);
     } else {
-      setEditingStatus(null);
-      setStatusName('');
+      resetForm();
     }
   }, [statusToEdit]);
 
-  const handleCreateStatus = async () => {
-    const newStatus: StatusDTO = {
-      name: statusName,
-      boardId,
-    };
+  const handleCreateStatus = useCallback(async () => {
+    const newStatus: StatusDTO = { name: statusName, boardId };
     await createStatus(newStatus);
     await loadStatuses(boardId);
     resetModal();
-  };
+  }, [statusName, boardId, createStatus, loadStatuses]);
 
-  const handleModifyStatus = async () => {
+  const handleModifyStatus = useCallback(async () => {
     if (!editingStatus) return;
-    const updatedStatus: StatusDTO = {
-      ...editingStatus,
-      name: statusName,
-    };
+    const updatedStatus: StatusDTO = { ...editingStatus, name: statusName };
     await modifyStatus(updatedStatus);
+    await loadStatuses(boardId);
     resetModal();
-  };
+  }, [statusName, editingStatus, modifyStatus, loadStatuses, boardId]);
 
-  const handleRemoveStatus = async (statusId: number) => {
-    await removeStatus(statusId);
-    if (editingStatus?.id === statusId) {
-      resetForm();
+  const handleRemoveStatus = useCallback(async (statusId: number) => {
+    const result = await Swal.fire({
+      title: "¿Estás seguro?",
+      text: "Este estado será eliminado permanentemente.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, eliminar",
+    });
+
+    if (result.isConfirmed) {
+      await removeStatus(statusId);
+      if (editingStatus?.id === statusId) {
+        resetForm();
+      }
+      await loadStatuses(boardId);
     }
-  };
+  }, [removeStatus, loadStatuses, editingStatus, boardId]);
 
   const handleEditClick = (status: StatusDTO) => {
     if (editingStatus?.id === status.id) {
@@ -65,7 +77,7 @@ const StatusModal: React.FC<StatusModalProps> = ({ isOpen, closeModal, boardId, 
 
   const resetForm = () => {
     setEditingStatus(null);
-    setStatusName('');
+    setStatusName("");
   };
 
   const resetModal = () => {
@@ -73,14 +85,19 @@ const StatusModal: React.FC<StatusModalProps> = ({ isOpen, closeModal, boardId, 
     closeModal();
   };
 
+  const isSaveButtonDisabled = !editingStatus || editingStatus.name === statusName;
+  const isCreateButtonDisabled = !statusName;
+
   if (!isOpen) return null;
 
   return (
-    <div className="modal fade show" style={{ display: 'block' }} tabIndex={-1} aria-labelledby="statusModal">
+    <div className="modal fade show" style={{ display: "block" }} tabIndex={-1} aria-labelledby="statusModal">
       <div className="modal-dialog">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title" id="statusModal">{editingStatus ? 'Editar Estado' : 'Nuevo Estado'}</h5>
+            <h5 className="modal-title" id="statusModal">
+              {editingStatus ? "Editar Estado" : "Nuevo Estado"}
+            </h5>
             <button type="button" className="btn-close" aria-label="Cerrar" onClick={resetModal}></button>
           </div>
           <div className="modal-body">
@@ -98,17 +115,17 @@ const StatusModal: React.FC<StatusModalProps> = ({ isOpen, closeModal, boardId, 
 
             <div>
               <h5>Estados actuales:</h5>
-              {statuses && statuses.length > 0 ? (
+              {statuses?.length ? (
                 statuses.map((status) => (
                   <div key={status.id} className="mb-3">
                     <div className="d-flex justify-content-between align-items-center">
                       <span>{status.name}</span>
                       <div>
                         <button
-                          className={`btn me-2 ${editingStatus?.id === status.id ? 'btn-info' : 'btn-warning'}`}
+                          className={`btn me-2 ${editingStatus?.id === status.id ? "btn-info" : "btn-warning"}`}
                           onClick={() => handleEditClick(status)}
                         >
-                          {editingStatus?.id === status.id ? 'Editando' : 'Editar'}
+                          {editingStatus?.id === status.id ? "Editando" : "Editar"}
                         </button>
                         <button
                           className="btn btn-danger"
@@ -126,14 +143,16 @@ const StatusModal: React.FC<StatusModalProps> = ({ isOpen, closeModal, boardId, 
             </div>
           </div>
           <div className="modal-footer">
-            <button type="button" className="btn btn-secondary" onClick={resetModal}>Cerrar</button>
+            <button type="button" className="btn btn-secondary" onClick={resetModal}>
+              Cerrar
+            </button>
             <button
               type="button"
               className="btn btn-primary"
               onClick={editingStatus ? handleModifyStatus : handleCreateStatus}
-              disabled={!statusName}
+              disabled={editingStatus ? isSaveButtonDisabled : isCreateButtonDisabled}
             >
-              {editingStatus ? 'Guardar Cambios' : 'Crear Estado'}
+              {editingStatus ? "Guardar Cambios" : "Crear Estado"}
             </button>
           </div>
         </div>

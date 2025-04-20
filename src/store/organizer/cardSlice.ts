@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { CardDTO } from '../../management/organizer/types/CardDTO'; // Asegúrate de que la ruta sea correcta
+import { CardDTO } from '../../management';
 
 interface CardState {
   cards: CardDTO[];
@@ -10,7 +10,7 @@ interface CardState {
 
 const initialState: CardState = {
   cards: [],
-  cardsByStatus: {}, // Inicializa como un objeto vacío
+  cardsByStatus: {},
   activeCard: null,
   isLoadingCards: false,
 };
@@ -24,9 +24,6 @@ const cardSlice = createSlice({
     },
     onDeleteCard: (state, action: PayloadAction<number>) => {
       state.cards = state.cards.filter((card) => card.id !== action.payload);
-    },
-    onLoadCards: (state, action: PayloadAction<CardDTO[]>) => {
-      state.cards = action.payload;
     },
     onLoadCardsByStatus: (state, action: PayloadAction<{ cards: CardDTO[], statusId: number }>) => {
       const { cards, statusId } = action.payload;
@@ -50,7 +47,6 @@ const cardSlice = createSlice({
 export const {
   onAddNewCard,
   onDeleteCard,
-  onLoadCards,
   onLoadCardsByStatus,
   onSetActiveCard,
   onUpdateCard,

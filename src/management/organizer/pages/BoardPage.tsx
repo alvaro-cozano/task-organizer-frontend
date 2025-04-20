@@ -1,16 +1,16 @@
-// src/management/organizer/pages/BoardPage.tsx
-
 import { useState, useEffect } from 'react';
-import { Navbar } from '../../components/Navbar';
-import { useBoardStore } from '../../../hooks/useBoardStore';
 import { useNavigate } from 'react-router-dom';
-import BoardModal from '../components/board/BoardModal';
+
+import { Navbar, BoardModal, BoardCard, BoardDTO } from '../../../management';
+import { useBoardStore, useAuthStore } from '../../../hooks';
 
 export const BoardPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const { boards, activeBoard, setActiveBoard, startLoadingBoards } = useBoardStore();
+  const { user } = useAuthStore();
   const navigate = useNavigate();
+
+  const currentUserEmail = user?.email || '';
 
   const openModal = () => {
     setActiveBoard(null);
@@ -20,10 +20,10 @@ export const BoardPage = () => {
   const closeModal = async () => {
     setIsModalOpen(false);
     setActiveBoard(null);
-    await startLoadingBoards(); // Carga los tableros nuevamente al cerrar
+    await startLoadingBoards();
   };
 
-  const handleBoardClick = (board: any) => {
+  const handleBoardClick = (board: BoardDTO) => {
     navigate(`/cards/${board.id}`);
   };
 
@@ -46,18 +46,11 @@ export const BoardPage = () => {
 
         <div className="row board-list">
           {boards.map((board) => (
-            <div
+            <BoardCard
               key={board.id}
-              className="col-md-4 mb-3"
+              board={board}
               onClick={() => handleBoardClick(board)}
-              style={{ cursor: 'pointer' }}
-            >
-              <div className="card shadow-sm">
-                <div className="card-body">
-                  <h5 className="card-title">{board.boardName}</h5>
-                </div>
-              </div>
-            </div>
+            />
           ))}
         </div>
 
@@ -67,9 +60,12 @@ export const BoardPage = () => {
             onClose={closeModal}
             boardToEdit={activeBoard}
             boards={boards}
+            currentUserEmail={currentUserEmail}
           />
         )}
       </div>
     </>
   );
 };
+
+export default BoardPage;

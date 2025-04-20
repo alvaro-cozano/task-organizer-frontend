@@ -1,28 +1,20 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../store';
+import Swal from 'sweetalert2';
+
+import { springApi } from '../api';
+import { BoardDTO } from '../management';
 import {
+    RootState,
     onAddNewBoard,
     onDeleteBoard,
     onLoadboards,
     onSetActiveBoard,
     onUpdateBoard,
-} from '../store/organizer/boardSlice';
-import { springApi } from '../api';
-import Swal from 'sweetalert2';
-
-export interface UserReferenceDTO {
-    email: string;
-}
-
-export interface BoardDTO {
-    id: number;
-    boardName: string;
-    users: UserReferenceDTO[];
-}
+} from '../store';
 
 export interface CreateBoardDTO {
     boardName: string;
-    users: UserReferenceDTO[]; // Lista de usuarios, si lo necesitas
+    users: { email: string }[];
 }
 
 export const useBoardStore = () => {
@@ -38,24 +30,19 @@ export const useBoardStore = () => {
 
     const startSavingBoard = async (board: BoardDTO | CreateBoardDTO) => {
         try {
-            // Verificar si el board tiene un id y si es un número válido
             if ('id' in board && board.id !== undefined && board.id !== null && board.id !== 0) {
-                // Actualización de tablero (si tiene id)
                 await springApi.put(`/boards/${board.id}`, board);
                 dispatch(onUpdateBoard(board));
             } else {
-                // Limpiar cualquier propiedad 'id' antes de hacer la creación
                 const createBoardData: CreateBoardDTO = {
                     boardName: board.boardName,
                     users: board.users,
                 };
 
-                // Crear un nuevo tablero (POST) sin id
                 const { data } = await springApi.post('/boards', createBoardData);
                 dispatch(onAddNewBoard(data));
             }
 
-            // Recargar los tableros después de la operación
             await startLoadingBoards();
         } catch (error) {
             throw error;

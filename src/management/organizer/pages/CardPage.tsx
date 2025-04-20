@@ -1,17 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useCardStore } from '../../../hooks/useCardStore';
-import { useStatusStore } from '../../../hooks/useStatusStore';
-import { StatusDTO } from '../types/StatusDTO';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../store';
-import { Navbar } from '../../components/Navbar';
-import CardModal from '../components/card/CardModal'; // Componente de modal de tarjeta
-import StatusModal from '../components/status/StatusModal'; // Componente de modal de estado
-import { CardDTO } from '../types/CardDTO';
-import StatusColumn from '../components/status/StatusColumn';
 
-const CardPage = () => {
+import { useCardStore, useStatusStore } from '../../../hooks';
+import { Navbar, CardDTO, StatusDTO, CardModal, StatusModal, StatusColumn } from '../../../management';
+import { RootState } from '../../../store';
+
+export const CardPage = () => {
   const { boardId } = useParams<{ boardId: string }>();
   const { loadStatuses, statuses } = useStatusStore();
   const { startLoadingCardsByBoardAndStatus } = useCardStore();
@@ -20,72 +15,46 @@ const CardPage = () => {
 
   const boardIdNumber = boardId ? Number(boardId) : 0;
 
-  const [isCardModalOpen, setIsCardModalOpen] = useState(false); // Estado para abrir/cerrar modal de tarjeta
-  const [selectedCard, setSelectedCard] = useState<CardDTO | null>(null); // Estado para la tarjeta seleccionada
-  const [isStatusModalOpen, setIsStatusModalOpen] = useState(false); // Estado para abrir/cerrar modal de estado
-  const [statusToEdit, setStatusToEdit] = useState<StatusDTO | null>(null); // Estado para editar un estado
+  const [isCardModalOpen, setIsCardModalOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState<CardDTO | null>(null);
+  const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
+  const [statusToEdit] = useState<StatusDTO | null>(null);
 
   useEffect(() => {
-    if (boardId) {
-      loadStatuses(boardIdNumber);
-    }
+    if (boardId) loadStatuses(boardIdNumber);
   }, [boardId]);
 
   useEffect(() => {
     if (statuses.length > 0 && boardId) {
       statuses.forEach((status: StatusDTO) => {
-        if (status.id) {
-          startLoadingCardsByBoardAndStatus(boardIdNumber, status.id);
-        }
+        if (status.id) startLoadingCardsByBoardAndStatus(boardIdNumber, status.id);
       });
     }
   }, [statuses, boardId]);
 
-  const handleCreateCard = () => {
-    setSelectedCard(null); // No hay tarjeta seleccionada para crear
-    setIsCardModalOpen(true); // Abre el modal de tarjeta
-  };
+  const handleCreateCard = useCallback(() => {
+    setSelectedCard(null);
+    setIsCardModalOpen(true);
+  }, []);
 
-  const handleEditCard = (card: CardDTO) => {
-    setSelectedCard(card); // Establece la tarjeta seleccionada
-    setIsCardModalOpen(true); // Abre el modal de tarjeta
-  };
+  const handleEditCard = useCallback((card: CardDTO) => {
+    setSelectedCard(card);
+    setIsCardModalOpen(true);
+  }, []);
 
-  const handleOpenStatusModal = () => {
-    setIsStatusModalOpen(true); // Abre el modal para gestionar estados
-  };
-
-  // Función para editar un estado
-  const handleEditStatus = (status: StatusDTO) => {
-    setStatusToEdit(status); // Establece el estado seleccionado para editar
-    setIsStatusModalOpen(true); // Abre el modal de edición de estado
-  };
+  const handleOpenStatusModal = useCallback(() => {
+    setIsStatusModalOpen(true);
+  }, []);
 
   return (
     <>
       <Navbar />
       <div className="container my-4">
         <div className="mb-3">
-          <button
-            className="btn btn-secondary"
-            onClick={() => navigate(`/boards`)} // Navegar a la página de tableros
-          >
-            Volver a los Tableros
-          </button>
-          {/* Botón único para abrir el modal de edición de estados */}
-          <button
-            className="btn btn-info ms-3"
-            onClick={handleOpenStatusModal} // Abre el modal para gestionar estados
-          >
-            Gestionar Estados
-          </button>
+          <button className="btn btn-secondary" onClick={() => navigate(`/boards`)}>Volver a los Tableros</button>
+          <button className="btn btn-info ms-3" onClick={handleOpenStatusModal}>Gestionar Estados</button>
           {statuses.length > 0 && (
-            <button
-              className="btn btn-primary ms-3"
-              onClick={handleCreateCard} // Abre el modal para crear una nueva tarjeta
-            >
-              Crear Tarea
-            </button>
+            <button className="btn btn-primary ms-3" onClick={handleCreateCard}>Crear Tarea</button>
           )}
         </div>
         
@@ -96,11 +65,9 @@ const CardPage = () => {
               return (
                 <div key={status.id} className="col-md-4 mb-4">
                   <StatusColumn
-                    status={status}  // Pasa la propiedad 'status' aquí
-                    statusName={status.name}
+                    status={status}
                     cards={cards}
                     onCardClick={handleEditCard}
-                    onEditStatus={() => handleEditStatus(status)} // Pasa la función para editar el estado
                   />
                 </div>
               );
@@ -111,21 +78,19 @@ const CardPage = () => {
         </div>
       </div>
 
-      {/* Modal para crear o editar tarjeta */}
       <CardModal
         isOpen={isCardModalOpen}
         closeModal={() => setIsCardModalOpen(false)}
         card={selectedCard}
-        statuses={statuses} // 👈 pasa los estados aquí
+        statuses={statuses}
       />
 
-      {/* Modal para gestionar estados */}
       <StatusModal
         isOpen={isStatusModalOpen}
         closeModal={() => setIsStatusModalOpen(false)}
-        boardId={boardIdNumber} // Pasa el boardId como prop
-        statuses={statuses} // Pasa la lista de estados aquí
-        statusToEdit={statusToEdit} // Pasa el estado que se va a editar
+        boardId={boardIdNumber}
+        statuses={statuses}
+        statusToEdit={statusToEdit}
       />
     </>
   );

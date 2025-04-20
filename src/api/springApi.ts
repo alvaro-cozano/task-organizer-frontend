@@ -1,5 +1,6 @@
 import axios, { InternalAxiosRequestConfig } from 'axios';
-import { getEnvVariables } from '../helpers/getEnvVariables';
+
+import { getEnvVariables } from '../helpers';
 
 const { VITE_API_URL } = getEnvVariables();
 
@@ -13,7 +14,7 @@ springApi.interceptors.request.use((config: InternalAxiosRequestConfig): Interna
   if (config.headers) {
     config.headers['Authorization'] = `Bearer ${token}`;
   }
-
+  
   return config;
 });
 

@@ -1,155 +1,166 @@
-import React, { useEffect, useState } from 'react';
-import Modal from 'react-modal';
-import { useDispatch, useSelector } from 'react-redux';
-import { CardDTO } from '../../types/CardDTO';
-import DatePicker from 'react-datepicker';
-import "react-datepicker/dist/react-datepicker.css";
-import { addHours, format } from 'date-fns';
-import { FabDeleteCard } from '../card/FabDeleteCardProps';
-import { RootState } from '../../../../store';
-import { useCardStore } from '../../../../hooks/useCardStore'; // Importamos el hook
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
-import { StatusDTO } from '../../types/StatusDTO';
+import Modal from 'react-modal';
+import DatePicker from 'react-datepicker';
+import { addHours, format } from 'date-fns';
+
+import { CardDTO, StatusDTO } from '../../../../management';
+import { useCardStore } from '../../../../hooks';
+
+import "react-datepicker/dist/react-datepicker.css";
 
 interface CardModalProps {
   isOpen: boolean;
   closeModal: () => void;
   card: CardDTO | null;
-  statuses: StatusDTO[];
+  statuses: StatusDTO[] | null;
 }
 
 const CardModal: React.FC<CardModalProps> = ({ isOpen, closeModal, card, statuses }) => {
   const { boardId } = useParams<{ boardId: string }>();
+
   const [formData, setFormData] = useState<CardDTO>({
     cardTitle: '',
     description: '',
     startDate: '',
     endDate: '',
     priority: 1,
-    board_id: 0,
+    board_id: parseInt(boardId || '0', 10),
     status_id: 1,
     prev_status_id: 0,
-    users: [{ email: '' }]
+    users: [{ email: '' }],
   });
 
-  const { startSavingCard } = useCardStore(); // Usamos el hook para guardar la tarjeta
-
+  const { startSavingCard, startDeletingCard } = useCardStore();
 
   useEffect(() => {
     if (card) {
       setFormData({
         ...card,
-        board_id: card.board_id || 0,
-        status_id: card.status_id || 1,
+        board_id: card.board_id || parseInt(boardId || '0', 10),
         prev_status_id: card.status_id || 0,
         users: card.users || [{ email: '' }],
       });
     } else {
-      const defaultStatusId = Array.isArray(statuses)
+      const defaultStatusId = Array.isArray(statuses) && statuses.length > 0
         ? statuses.find(s => s.boardId === parseInt(boardId || '0', 10))?.id ?? 0
         : 0;
-  
+
+      const currentDate = new Date();
+      const endDate = addHours(currentDate, 2);
+
       setFormData({
         cardTitle: '',
         description: '',
-        startDate: '',
-        endDate: '',
+        startDate: format(currentDate, "yyyy-MM-dd HH:mm:ss"),
+        endDate: format(endDate, "yyyy-MM-dd HH:mm:ss"),
         priority: 1,
-        board_id: boardId ? parseInt(boardId, 10) : 0,
+        board_id: parseInt(boardId || '0', 10),
         status_id: defaultStatusId,
         prev_status_id: 0,
-        users: [{ email: '' }]
+        users: [{ email: '' }],
       });
     }
-  }, [card, boardId, statuses]); // <---- ¡Agregamos `statuses`!
-  
+  }, [card, boardId, statuses]);
 
-  useEffect(() => {
-  }, [statuses]);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
-  };
+    setFormData(prevState => ({
+      ...prevState,
+      [name]: value,
+    }));
+  }, []);
 
-  const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleStatusChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedStatusId = parseInt(e.target.value, 10);
-    setFormData({
-      ...formData,
+    setFormData(prevState => ({
+      ...prevState,
       status_id: selectedStatusId,
-    });
-  };
+    }));
+  }, []);
 
-  const handleDateChange = (date: Date | null, name: string) => {
+  const handleDateChange = useCallback((date: Date | null, name: string) => {
     if (date) {
-      const updatedDate = addHours(date, 1);
-      setFormData({
-        ...formData,
-        [name]: format(updatedDate, "yyyy-MM-dd HH:mm:ss")  // Cambié el formato a "yyyy-MM-dd HH:mm:ss"
-      });
+      const updatedDate = format(date, "yyyy-MM-dd HH:mm:ss");
+      setFormData(prevState => ({
+        ...prevState,
+        [name]: updatedDate,
+      }));
     } else {
-      setFormData({
-        ...formData,
-        [name]: ''
-      });
+      setFormData(prevState => ({
+        ...prevState,
+        [name]: '',
+      }));
     }
-  };
+  }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
-
-    startSavingCard(formData); // Llamamos al método startSavingCard desde el hook
-
+    startSavingCard(formData);
     closeModal();
-  };
+  }, [formData, startSavingCard, closeModal]);
 
-  const handleEmailChange = (index: number, email: string) => {
+  const handleDelete = useCallback(() => {
+    if (card && card.id) {
+      startDeletingCard(card.id, card.board_id, card.status_id);
+      closeModal();
+    }
+  }, [card, startDeletingCard, closeModal]);
+
+  const handleEmailChange = useCallback((index: number, email: string) => {
     const updatedUsers = [...formData.users];
     updatedUsers[index].email = email;
     setFormData({ ...formData, users: updatedUsers });
-  };
+  }, [formData]);
 
-  const handleAddUser = () => {
-    setFormData({
-      ...formData,
-      users: [...formData.users, { email: '' }]
-    });
-  };
+  const handleAddUser = useCallback(() => {
+    setFormData(prevState => ({
+      ...prevState,
+      users: [...prevState.users, { email: '' }],
+    }));
+  }, []);
 
-  const handleRemoveUser = (index: number) => {
+  const handleRemoveUser = useCallback((index: number) => {
     const updatedUsers = formData.users.filter((_, i) => i !== index);
     setFormData({ ...formData, users: updatedUsers });
+  }, [formData]);
+
+  const isSubmitDisabled = () => {
+    return !formData.cardTitle || !formData.startDate || !formData.endDate || !formData.priority || !formData.status_id;
   };
 
   return (
     <Modal isOpen={isOpen} onRequestClose={closeModal} contentLabel="Card Modal">
-      <h2>{card ? 'Editar Tarjeta' : 'Crear Tarjeta'}</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Título:</label>
+      <div className="modal-header">
+        <h5 className="modal-title">{card ? 'Editar Tarjeta' : 'Crear Tarjeta'}</h5>
+        <button type="button" className="btn-close" onClick={closeModal} aria-label="Cerrar"></button>
+      </div>
+
+      <form onSubmit={handleSubmit} className="modal-body">
+        <div className="mb-3">
+          <label className="form-label">Título:</label>
           <input
             type="text"
             name="cardTitle"
             value={formData.cardTitle}
             onChange={handleChange}
             required
+            className="form-control"
           />
         </div>
 
-        <div>
-          <label>Descripción:</label>
+        <div className="mb-3">
+          <label className="form-label">Descripción:</label>
           <textarea
             name="description"
             value={formData.description || ''}
             onChange={handleChange}
+            className="form-control"
           />
         </div>
 
-        <div>
-          <label>Fecha de inicio:</label>
+        <div className="mb-3">
+          <label className="form-label">Fecha de inicio:</label>
           <DatePicker
             selected={formData.startDate ? new Date(formData.startDate) : null}
             onChange={(date: Date | null) => handleDateChange(date, 'startDate')}
@@ -158,11 +169,12 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, closeModal, card, statuse
             timeIntervals={15}
             timeCaption="Hora"
             required
+            className="form-control"
           />
         </div>
 
-        <div>
-          <label>Fecha de fin:</label>
+        <div className="mb-3">
+          <label className="form-label">Fecha de fin:</label>
           <DatePicker
             selected={formData.endDate ? new Date(formData.endDate) : null}
             onChange={(date: Date | null) => handleDateChange(date, 'endDate')}
@@ -170,13 +182,13 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, closeModal, card, statuse
             showTimeSelect
             timeIntervals={15}
             timeCaption="Hora"
-            minDate={formData.startDate ? new Date(formData.startDate) : new Date()}
             required
+            className="form-control"
           />
         </div>
 
-        <div>
-          <label>Prioridad:</label>
+        <div className="mb-3">
+          <label className="form-label">Prioridad:</label>
           <input
             type="number"
             name="priority"
@@ -185,57 +197,79 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, closeModal, card, statuse
             required
             min={1}
             max={5}
+            className="form-control"
           />
         </div>
 
-        <div>
-          <label>Status:</label>
+        <div className="mb-3">
+          <label className="form-label">Status:</label>
           <select
             name="status_id"
-            value={formData.status_id || 0}
+            value={formData.status_id}
             onChange={handleStatusChange}
             required
+            className="form-select"
           >
             <option value="" disabled>Selecciona un estado</option>
-            {Array.isArray(statuses) && statuses.map((status: StatusDTO) => (
-              <option key={status.id} value={status.id}>
-                {status.name}
-              </option>
-            ))}
+            {Array.isArray(statuses) && statuses.length > 0 ? (
+              statuses.map((status: StatusDTO) => (
+                <option key={status.id} value={status.id}>
+                  {status.name}
+                </option>
+              ))
+            ) : (
+              <option value={0}>No hay estados disponibles</option>
+            )}
           </select>
         </div>
 
-        <div>
-          <label>Correos de los usuarios:</label>
+        <div className="mb-3">
+          <label className="form-label">Correos de los usuarios:</label>
           {formData.users.map((user, index) => (
-            <div key={index} style={{ marginBottom: '10px' }}>
+            <div key={index} className="input-group mb-2">
               <input
                 type="email"
-                name={`users[${index}].email`}
                 value={user.email}
                 onChange={(e) => handleEmailChange(index, e.target.value)}
-                required
+                className="form-control"
               />
               {formData.users.length > 1 && (
-                <button type="button" onClick={() => handleRemoveUser(index)}>-</button>
+                <button
+                  type="button"
+                  onClick={() => handleRemoveUser(index)}
+                  className="btn btn-danger"
+                >
+                  <i className="bi bi-dash-circle"></i>
+                </button>
               )}
             </div>
           ))}
-          <button type="button" onClick={handleAddUser}>Añadir Usuario</button>
+          <button type="button" onClick={handleAddUser} className="btn btn-secondary">
+            Añadir Usuario
+          </button>
         </div>
 
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <button type="submit">
+        <div className="d-flex justify-content-between">
+          <button type="submit" className="btn btn-primary" disabled={isSubmitDisabled()}>
             {card ? 'Actualizar' : 'Crear'}
           </button>
-          
           {card && (
-            <FabDeleteCard card={card} />
+            <button
+              type="button"
+              onClick={handleDelete}
+              className="btn btn-danger"
+            >
+              Eliminar
+            </button>
           )}
         </div>
-
-        <button type="button" onClick={closeModal}>Cancelar</button>
       </form>
+
+      <div className="modal-footer">
+        <button type="button" className="btn btn-secondary" onClick={closeModal}>
+          Cerrar
+        </button>
+      </div>
     </Modal>
   );
 };

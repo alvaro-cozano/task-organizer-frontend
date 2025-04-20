@@ -1,8 +1,10 @@
 import { useEffect, FormEvent, ChangeEvent } from 'react';
-import Swal from 'sweetalert2';
-import { useAuthStore, useForm } from '../../hooks';
+
 import { Link as RouterLink } from 'react-router-dom';
 import { Link } from "@mui/material"
+import Swal from 'sweetalert2';
+
+import { useAuthStore, useForm } from '../../hooks';
 
 import './AuthPage.css';
 

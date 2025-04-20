@@ -1,24 +1,21 @@
-import { useBoardStore } from '../../../../hooks/useBoardStore';
-import { BoardDTO } from '../../types/BoardDTO';
+import React from 'react';
+import { BoardDTO } from '../../../../management';
 
-interface Props {
-    board: BoardDTO;
+interface BoardCardProps {
+  board: BoardDTO;
+  onClick: () => void;
 }
 
-export const BoardCard = ({ board }: Props) => {
-    const { setActiveBoard } = useBoardStore();
-
-    const handleMouseDown = () => {
-        setActiveBoard(board);
-    };
-
-    return (
-        <div
-            onMouseDown={handleMouseDown}
-            className="card p-3 shadow-sm rounded"
-            style={{ width: '200px', cursor: 'pointer' }}
-        >
-            <h5 className="text-center">{board.boardName}</h5>
+const BoardCard: React.FC<BoardCardProps> = ({ board, onClick }) => {
+  return (
+    <div className="col-md-4 mb-3" onClick={onClick} style={{ cursor: 'pointer' }}>
+      <div className="card shadow-sm">
+        <div className="card-body">
+          <h5 className="card-title">{board.boardName}</h5>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
+
+export default BoardCard;

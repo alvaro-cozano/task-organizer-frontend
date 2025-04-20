@@ -1,55 +1,49 @@
 import React, { useEffect, useState } from 'react';
-import { useBoardStore } from '../../../../hooks/useBoardStore';
 import Swal from 'sweetalert2';
-import { BoardDTO } from '../../types/BoardDTO';
-import { useAuthStore } from '../../../../hooks';
+
+import { useBoardStore, useAuthStore } from '../../../../hooks';
+import { BoardDTO } from '../../../../management';
 
 interface BoardModalProps {
   isOpen: boolean;
   onClose: () => void;
   boardToEdit: BoardDTO | null;
   boards: BoardDTO[] | undefined;
-  isEditMode?: boolean;
-  currentUserEmail: string; // Recibimos el email del usuario actual
+  currentUserEmail: string;
 }
 
 const BoardModal: React.FC<BoardModalProps> = ({ isOpen, onClose, boardToEdit, boards = [], currentUserEmail }) => {
   const { startSavingBoard, startDeletingBoard } = useBoardStore();
   const { user } = useAuthStore();
-  const currentUsername = user?.username || ''; // Obtenemos el nombre de usuario actual
+  const currentUsername = user?.username || '';
 
   const [boardName, setBoardName] = useState('');
-  const [users, setUsers] = useState<{ email: string }[]>([]); // Para manejar los usuarios
+  const [users, setUsers] = useState<{ email: string }[]>([{ email: currentUserEmail }]);
   const [editingBoard, setEditingBoard] = useState<BoardDTO | null>(null);
 
   useEffect(() => {
     if (boardToEdit) {
       setEditingBoard(boardToEdit);
       setBoardName(boardToEdit.boardName);
-      setUsers(boardToEdit.users || [{ email: currentUserEmail }]); // Garantizamos que siempre haya un email
+      setUsers(boardToEdit.users || [{ email: currentUserEmail }]);
     } else {
-      // Añadimos al usuario actual automáticamente si estamos creando un nuevo tablero
-      setUsers([{ email: currentUserEmail }]);
       resetForm();
     }
   }, [boardToEdit, currentUserEmail]);
 
   const handleSave = async () => {
-    const board: BoardDTO = {
-      id: editingBoard?.id || 0,
-      boardName,
-      users,
-    };
-
     try {
-      await startSavingBoard(board); // Guardar tablero
-      resetModal(); // Resetear el modal después de guardar
+      await startSavingBoard({ id: editingBoard?.id || 0, boardName, users });
+      if (!editingBoard) {
+        resetModal();
+      } else {
+        resetForm();
+      }
     } catch (error: any) {
-      const errorMessage = error?.response?.data?.message || 'Ya existe un tablero con el mismo nombre';
       Swal.fire({
         icon: 'error',
         title: 'Error',
-        text: errorMessage,
+        text: error?.response?.data?.message || 'Ya existe un tablero con el mismo nombre',
       });
     }
   };
@@ -71,42 +65,43 @@ const BoardModal: React.FC<BoardModalProps> = ({ isOpen, onClose, boardToEdit, b
 
   const handleEditClick = (board: BoardDTO) => {
     if (editingBoard?.id === board.id) {
-      resetForm(); // Si estamos editando el mismo tablero, resetear
+      resetForm();
     } else {
       setEditingBoard(board);
       setBoardName(board.boardName);
-      setUsers(board.users || []); // Cargar usuarios del tablero
+      setUsers(board.users || [{ email: currentUserEmail }]);
     }
   };
 
   const resetForm = () => {
     setEditingBoard(null);
     setBoardName('');
-    setUsers([{ email: currentUserEmail }]); // Reseteamos el estado, siempre manteniendo al usuario actual
+    setUsers([{ email: currentUserEmail }]);
   };
 
   const resetModal = () => {
     resetForm();
-    onClose(); // Cerrar modal después de resetear
+    onClose();
   };
 
-  // Funciones para manejar los usuarios
   const handleEmailChange = (index: number, value: string) => {
-    const updatedUsers = [...users];
-    updatedUsers[index].email = value;
-    setUsers(updatedUsers);
+    setUsers(users => users.map((user, i) => i === index ? { email: value } : user));
   };
 
-  const handleAddUser = () => {
-    setUsers([...users, { email: '' }]); // Añadir usuario con email vacío
-  };
+  const handleAddUser = () => setUsers([...users, { email: '' }]);
 
   const handleRemoveUser = (index: number) => {
-    const userToRemove = users[index];
-    if (userToRemove.email !== currentUserEmail) {
-      const updatedUsers = users.filter((_, i) => i !== index);
-      setUsers(updatedUsers);
+    if (users[index].email !== currentUserEmail) {
+      setUsers(users.filter((_, i) => i !== index));
     }
+  };
+
+  const isSaveDisabled = () => {
+    if (!boardName.trim()) return true;
+    if (editingBoard) {
+      return editingBoard.boardName === boardName && JSON.stringify(editingBoard.users) === JSON.stringify(users);
+    }
+    return false;
   };
 
   if (!isOpen) return null;
@@ -116,7 +111,9 @@ const BoardModal: React.FC<BoardModalProps> = ({ isOpen, onClose, boardToEdit, b
       <div className="modal-dialog modal-lg">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title" id="boardModal">{editingBoard ? 'Editar Tablero' : 'Nuevo Tablero'}</h5>
+            <h5 className="modal-title" id="boardModal">
+              {editingBoard ? 'Editar Tablero' : 'Nuevo Tablero'}
+            </h5>
             <button type="button" className="btn-close" aria-label="Cerrar" onClick={resetModal}></button>
           </div>
           <div className="modal-body">
@@ -138,7 +135,7 @@ const BoardModal: React.FC<BoardModalProps> = ({ isOpen, onClose, boardToEdit, b
                   <input
                     type="email"
                     className="form-control"
-                    value={user.email || ''} // Aseguramos que sea siempre una cadena vacía si no tiene email
+                    value={user.email || ''}
                     onChange={(e) => handleEmailChange(index, e.target.value)}
                     required
                     disabled={user.email === currentUserEmail}
@@ -154,7 +151,7 @@ const BoardModal: React.FC<BoardModalProps> = ({ isOpen, onClose, boardToEdit, b
 
             <div>
               <h5>Tableros actuales:</h5>
-              {boards && boards.length > 0 ? (
+              {boards.length > 0 ? (
                 boards.map((board) => (
                   <div key={board.id} className="mb-3">
                     <div className="d-flex justify-content-between align-items-center">
@@ -180,18 +177,18 @@ const BoardModal: React.FC<BoardModalProps> = ({ isOpen, onClose, boardToEdit, b
                 <p>No hay tableros disponibles.</p>
               )}
             </div>
+          </div>
 
-            <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" onClick={resetModal}>Cancelar</button>
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={handleSave}
-                disabled={!boardName.trim()}
-              >
-                {editingBoard ? 'Actualizar' : 'Crear'}
-              </button>
-            </div>
+          <div className="modal-footer">
+            <button type="button" className="btn btn-secondary" onClick={resetModal}>Cerrar</button>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={handleSave}
+              disabled={isSaveDisabled()}
+            >
+              {editingBoard ? 'Actualizar' : 'Crear'}
+            </button>
           </div>
         </div>
       </div>

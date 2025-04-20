@@ -1,9 +1,8 @@
 import { Route, Routes, Navigate } from "react-router-dom"
 import { useEffect } from "react";
-import { useAuthStore } from "../hooks/useAuthStore";
-import { AuthRoutes } from "../auth/routes/AuthRoutes";
-import { BoardPage } from "../management/organizer/pages/BoardPage";
-import CardPage from "../management/organizer/pages/CardPage";
+import { useAuthStore } from "../hooks";
+import { AuthRoutes } from "../auth";
+import { ManagementRoutes } from "../management";
 
 export const AppRouter = () => {
 
@@ -35,8 +34,7 @@ export const AppRouter = () => {
                 )
                 : (
                     <>
-                        <Route path="/" element={<BoardPage />}/>
-                        <Route path="/cards/:boardId" element={<CardPage />} />
+                        <Route path="/*" element={<ManagementRoutes />}/>
                         <Route path="*" element={<Navigate to="/" />}/>
                     </>
                 )

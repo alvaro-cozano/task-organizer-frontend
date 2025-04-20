@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { StatusDTO } from '../../management/organizer/types/StatusDTO'; // Asegúrate de tener este tipo
+import { StatusDTO } from '../../management';
 
 interface StatusState {
   statuses: StatusDTO[];
@@ -22,7 +22,7 @@ export const statusSlice = createSlice({
     },
     addStatus(state, action: PayloadAction<StatusDTO>) {
       if (!Array.isArray(state.statuses)) {
-        state.statuses = []; // Reinicia el estado a un array vacío en caso de que no lo sea
+        state.statuses = [];
       }
       state.statuses.push(action.payload);
     },
