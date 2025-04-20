@@ -10,6 +10,7 @@ import {
   setError
 } from '../store/organizer/statusSlice';
 import { springApi } from '../api';
+import Swal from 'sweetalert2';
 
 export const useStatusStore = () => {
   const dispatch = useDispatch();
@@ -35,23 +36,38 @@ export const useStatusStore = () => {
       const { data } = await springApi.post('/status', status);
       dispatch(addStatus(data));
     } catch (err: any) {
-      dispatch(setError('Error al crear el estado'));
+      console.log(err);
+      // Maneja el error y muestra la alerta personalizada
+      const errorMessage = err?.response?.data?.message || 'Ya existe un estado con ese nombre en este tablero';
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: errorMessage,
+      });
     } finally {
       dispatch(setLoading(false));
     }
   };
-
+  
   const modifyStatus = async (status: StatusDTO) => {
     dispatch(setLoading(true));
     try {
       const { data } = await springApi.put(`/status/${status.id}`, status);
       dispatch(updateStatus(data));
     } catch (err: any) {
-      dispatch(setError('Error al actualizar el estado'));
+      console.log(err);
+      // Maneja el error y muestra la alerta personalizada
+      const errorMessage = err?.response?.data?.message || 'Ya existe un estado con ese nombre en este tablero';
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: errorMessage,
+      });
     } finally {
       dispatch(setLoading(false));
     }
   };
+  
 
   const removeStatus = async (id: number) => {
     dispatch(setLoading(true));

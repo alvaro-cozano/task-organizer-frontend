@@ -38,9 +38,9 @@ export const boardSlice = createSlice({
                 board.id === action.payload.id ? action.payload : board
             );
         },
-        onDeleteBoard: (state) => {
-            if (state.activeBoard) {
-                state.boards = state.boards.filter(board => board.id !== state.activeBoard!.id);
+        onDeleteBoard: (state, action: PayloadAction<number>) => {
+            state.boards = state.boards.filter(board => board.id !== action.payload);
+            if (state.activeBoard && state.activeBoard.id === action.payload) {
                 state.activeBoard = null;
             }
         },

@@ -21,6 +21,9 @@ export const statusSlice = createSlice({
       state.statuses = action.payload;
     },
     addStatus(state, action: PayloadAction<StatusDTO>) {
+      if (!Array.isArray(state.statuses)) {
+        state.statuses = []; // Reinicia el estado a un array vacío en caso de que no lo sea
+      }
       state.statuses.push(action.payload);
     },
     updateStatus(state, action: PayloadAction<StatusDTO>) {

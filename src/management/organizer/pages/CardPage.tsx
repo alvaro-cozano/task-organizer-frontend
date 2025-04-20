@@ -79,12 +79,14 @@ const CardPage = () => {
           >
             Gestionar Estados
           </button>
-          <button
-            className="btn btn-primary ms-3"
-            onClick={handleCreateCard} // Abre el modal para crear una nueva tarjeta
-          >
-            Crear Tarea
-          </button>
+          {statuses.length > 0 && (
+            <button
+              className="btn btn-primary ms-3"
+              onClick={handleCreateCard} // Abre el modal para crear una nueva tarjeta
+            >
+              Crear Tarea
+            </button>
+          )}
         </div>
         
         <div className="row">

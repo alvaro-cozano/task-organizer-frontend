@@ -65,7 +65,6 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, closeModal, card, statuse
   
 
   useEffect(() => {
-    console.log('Statuses en CardModal:', statuses);
   }, [statuses]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -105,6 +104,24 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, closeModal, card, statuse
     startSavingCard(formData); // Llamamos al método startSavingCard desde el hook
 
     closeModal();
+  };
+
+  const handleEmailChange = (index: number, email: string) => {
+    const updatedUsers = [...formData.users];
+    updatedUsers[index].email = email;
+    setFormData({ ...formData, users: updatedUsers });
+  };
+
+  const handleAddUser = () => {
+    setFormData({
+      ...formData,
+      users: [...formData.users, { email: '' }]
+    });
+  };
+
+  const handleRemoveUser = (index: number) => {
+    const updatedUsers = formData.users.filter((_, i) => i !== index);
+    setFormData({ ...formData, users: updatedUsers });
   };
 
   return (
@@ -189,18 +206,22 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, closeModal, card, statuse
         </div>
 
         <div>
-            <label>Correo del usuario:</label>
-            <input
+          <label>Correos de los usuarios:</label>
+          {formData.users.map((user, index) => (
+            <div key={index} style={{ marginBottom: '10px' }}>
+              <input
                 type="email"
-                name="users[0].email"
-                value={formData.users[0]?.email || ''}
-                onChange={(e) => {
-                const updatedUser = { ...formData.users[0], email: e.target.value };
-                const users = [updatedUser]; // aseguramos nuevo array
-                setFormData({ ...formData, users });
-                }}
+                name={`users[${index}].email`}
+                value={user.email}
+                onChange={(e) => handleEmailChange(index, e.target.value)}
                 required
-            />
+              />
+              {formData.users.length > 1 && (
+                <button type="button" onClick={() => handleRemoveUser(index)}>-</button>
+              )}
+            </div>
+          ))}
+          <button type="button" onClick={handleAddUser}>Añadir Usuario</button>
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>

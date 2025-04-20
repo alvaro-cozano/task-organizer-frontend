@@ -57,16 +57,15 @@ export const useBoardStore = () => {
 
             // Recargar los tableros después de la operación
             await startLoadingBoards();
-        } catch (error: any) {
-            console.error(error);
-            Swal.fire('Error al guardar', error.response?.data?.msg || 'Error desconocido', 'error');
+        } catch (error) {
+            throw error;
         }
     };
 
     const startDeletingBoard = async (boardId: number) => {
         try {
             await springApi.delete(`/boards/${boardId}`);
-            dispatch(onDeleteBoard());
+            dispatch(onDeleteBoard(boardId));
             await startLoadingBoards();
         } catch (error: any) {
             console.error(error);

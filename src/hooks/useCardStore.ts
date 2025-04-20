@@ -33,9 +33,6 @@ export const useCardStore = () => {
         response = await springApi.put(`/cards/${card.id}`, card);
         dispatch(onUpdateCard(response.data));
       } else {
-        // Creación (POST)
-        console.log('Creando tarjeta:', card.board_id);
-        console.log(card);
         response = await springApi.post('/cards', card);
         dispatch(onAddNewCard(response.data));
       }
@@ -44,10 +41,16 @@ export const useCardStore = () => {
       await startLoadingCardsByBoardAndStatus(card.board_id, card.prev_status_id || 0);
       await startLoadingCardsByBoardAndStatus(card.board_id, card.status_id);
     } catch (error: any) {
-      console.error(error);
-      Swal.fire('Error al guardar', error.response?.data?.msg || 'Error desconocido', 'error');
+      const errorMessage = error?.response?.data?.message || 'Ya existe una tarjeta con el mismo titulo en este tablero';
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: errorMessage,
+        });
     }
   };
+  
+
   
 
 
