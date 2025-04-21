@@ -2,8 +2,8 @@ export interface CardDTO {
   id?: number;
   cardTitle: string;
   description?: string;
-  startDate: string;
-  endDate: string;
+  startDate: Date;
+  endDate: Date;
   priority: number;
   board_id: number;
   status_id: number;

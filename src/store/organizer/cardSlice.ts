@@ -25,6 +25,9 @@ const cardSlice = createSlice({
     onDeleteCard: (state, action: PayloadAction<number>) => {
       state.cards = state.cards.filter((card) => card.id !== action.payload);
     },
+    onLoadCards: (state, action: PayloadAction<CardDTO[]>) => {
+      state.cards = action.payload;
+    },
     onLoadCardsByStatus: (state, action: PayloadAction<{ cards: CardDTO[], statusId: number }>) => {
       const { cards, statusId } = action.payload;
       state.cardsByStatus = {
@@ -47,6 +50,7 @@ const cardSlice = createSlice({
 export const {
   onAddNewCard,
   onDeleteCard,
+  onLoadCards,
   onLoadCardsByStatus,
   onSetActiveCard,
   onUpdateCard,

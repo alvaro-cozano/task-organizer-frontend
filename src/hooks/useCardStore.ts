@@ -1,9 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
+import { format } from 'date-fns';
 
 import { springApi } from '../api';
 import { CardDTO } from '../management';
-import { RootState } from '../store';
+import { onLoadCards, RootState } from '../store';
 import {
   onAddNewCard,
   onDeleteCard,
@@ -24,17 +25,22 @@ export const useCardStore = () => {
 
   const startSavingCard = async (card: CardDTO) => {
     try {
+      const cardToSend = {
+        ...card,
+        startDate: format(card.startDate, 'yyyy-MM-dd HH:mm:ss'),
+        endDate: format(card.endDate, 'yyyy-MM-dd HH:mm:ss'),
+      };
+
       let response;
   
       if (card.id) {
-        response = await springApi.put(`/cards/${card.id}`, card);
+        response = await springApi.put(`/cards/${card.id}`, cardToSend);
         dispatch(onUpdateCard(response.data));
       } else {
-        response = await springApi.post('/cards', card);
+        response = await springApi.post('/cards', cardToSend);
         dispatch(onAddNewCard(response.data));
       }
   
-      // Recarga solo las tarjetas del estado y tablero actual
       await startLoadingCardsByBoardAndStatus(card.board_id, card.prev_status_id || 0);
       await startLoadingCardsByBoardAndStatus(card.board_id, card.status_id);
     } catch (error: any) {
@@ -59,10 +65,26 @@ export const useCardStore = () => {
     }
   };
 
+   const startLoadingMyCards = async () => {
+    try {
+      const { data } = await springApi.get('/cards/my-cards');
+      dispatch(onLoadCards(data));
+    } catch (error) {
+      console.error('Error al cargar tus tarjetas', error);
+    }
+  };
+
   const startLoadingCardsByBoardAndStatus = async (boardId: number, statusId: number) => {
     try {
       const { data } = await springApi.get(`/cards/boards/${boardId}/cards/status-id/${statusId}`);
-      dispatch(onLoadCardsByStatus({ cards: data, statusId })); // <- siempre despachá
+
+      const cardsWithDates = data.map((card: any) => ({
+        ...card,
+        startDate: new Date(card.startDate),
+        endDate: new Date(card.endDate),
+      }));
+
+      dispatch(onLoadCardsByStatus({ cards: cardsWithDates, statusId }));
     } catch (error: any) {
       console.error(error);
     }
@@ -78,6 +100,7 @@ export const useCardStore = () => {
     setActiveCard,
     startSavingCard,
     startDeletingCard,
+    startLoadingMyCards,
     startLoadingCardsByBoardAndStatus,
   };
 };

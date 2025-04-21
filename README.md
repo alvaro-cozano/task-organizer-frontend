@@ -36,3 +36,14 @@ npm install react-modal
 
 npm install date-fns
 npm i react-datepicker
+
+
+# Dependencias para autenticación con Google
+
+npm install @react-oauth/google
+npm list @react-oauth/google
+npm install typescript@latest --save-dev
+
+# Dependencias para el calendario
+
+npm install react-big-calendar

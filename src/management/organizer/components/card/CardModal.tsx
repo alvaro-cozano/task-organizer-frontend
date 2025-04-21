@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import Modal from 'react-modal';
 import DatePicker from 'react-datepicker';
-import { addHours, format } from 'date-fns';
+import { addHours } from 'date-fns';
 
 import { CardDTO, StatusDTO } from '../../../../management';
 import { useCardStore } from '../../../../hooks';
@@ -22,8 +22,8 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, closeModal, card, statuse
   const [formData, setFormData] = useState<CardDTO>({
     cardTitle: '',
     description: '',
-    startDate: '',
-    endDate: '',
+    startDate: new Date,
+    endDate: addHours( new Date(), 2 ),
     priority: 1,
     board_id: parseInt(boardId || '0', 10),
     status_id: 1,
@@ -52,8 +52,8 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, closeModal, card, statuse
       setFormData({
         cardTitle: '',
         description: '',
-        startDate: format(currentDate, "yyyy-MM-dd HH:mm:ss"),
-        endDate: format(endDate, "yyyy-MM-dd HH:mm:ss"),
+        startDate: currentDate,
+        endDate: endDate,
         priority: 1,
         board_id: parseInt(boardId || '0', 10),
         status_id: defaultStatusId,
@@ -80,25 +80,29 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, closeModal, card, statuse
   }, []);
 
   const handleDateChange = useCallback((date: Date | null, name: string) => {
-    if (date) {
-      const updatedDate = format(date, "yyyy-MM-dd HH:mm:ss");
-      setFormData(prevState => ({
-        ...prevState,
-        [name]: updatedDate,
-      }));
-    } else {
-      setFormData(prevState => ({
-        ...prevState,
-        [name]: '',
-      }));
-    }
+    setFormData(prevState => ({
+      ...prevState,
+      [name]: date || new Date(),
+    }));
   }, []);
+  
 
   const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     startSavingCard(formData);
+    setFormData({
+      cardTitle: '',
+      description: '',
+      startDate: new Date(),
+      endDate: addHours(new Date(), 2),
+      priority: 1,
+      board_id: parseInt(boardId || '0', 10),
+      status_id: statuses?.find(s => s.boardId === parseInt(boardId || '0', 10))?.id ?? 0,
+      prev_status_id: 0,
+      users: [{ email: '' }],
+    });
     closeModal();
-  }, [formData, startSavingCard, closeModal]);
+  }, [formData, startSavingCard, closeModal, boardId, statuses]);
 
   const handleDelete = useCallback(() => {
     if (card && card.id) {
@@ -130,7 +134,23 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, closeModal, card, statuse
   };
 
   return (
-    <Modal isOpen={isOpen} onRequestClose={closeModal} contentLabel="Card Modal">
+    <Modal
+        isOpen={isOpen}
+        onRequestClose={closeModal}
+        contentLabel="Card Modal"
+        style={{
+          overlay: {
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            zIndex: 1000,
+          },
+          content: {
+            backgroundColor: 'white',
+            padding: '20px',
+            borderRadius: '8px',
+            zIndex: 1001,
+          },
+        }}
+      >
       <div className="modal-header">
         <h5 className="modal-title">{card ? 'Editar Tarjeta' : 'Crear Tarjeta'}</h5>
         <button type="button" className="btn-close" onClick={closeModal} aria-label="Cerrar"></button>
@@ -170,6 +190,15 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, closeModal, card, statuse
             timeCaption="Hora"
             required
             className="form-control"
+            maxDate={formData.endDate ? new Date(formData.endDate) : undefined}
+            minTime={new Date(0, 0, 0, 0, 0)}
+            maxTime={
+              formData.endDate &&
+              formData.startDate &&
+              new Date(formData.startDate).toDateString() === new Date(formData.endDate).toDateString()
+                ? new Date(formData.endDate)
+                : new Date(0, 0, 0, 23, 59)
+            }
           />
         </div>
 
@@ -184,6 +213,15 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, closeModal, card, statuse
             timeCaption="Hora"
             required
             className="form-control"
+            minDate={formData.startDate ? new Date(formData.startDate) : undefined}
+            minTime={
+              formData.endDate &&
+              formData.startDate &&
+              new Date(formData.endDate).toDateString() === new Date(formData.startDate).toDateString()
+                ? new Date(formData.startDate)
+                : new Date(0, 0, 0, 0, 0)
+            }
+            maxTime={new Date(0, 0, 0, 23, 59)}
           />
         </div>
 

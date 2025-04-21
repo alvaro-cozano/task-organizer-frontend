@@ -8,7 +8,8 @@ import {
   onLogin, 
   onLogout,
   RootState, 
-  AppDispatch 
+  AppDispatch,
+  onLogoutBoards,
 } from "../store";
 
 interface LoginForm {
@@ -49,6 +50,34 @@ export const useAuthStore = () => {
       }, 10);
     }
   };
+
+  const signInWithGoogle = async () => {
+    return new Promise((resolve) => {
+      window.open(
+        `${import.meta.env.VITE_API_URL}/oauth2/authorization/google`,
+        'googleLogin',
+        'width=500,height=600'
+      );
+  
+      const messageListener = (event: MessageEvent) => {
+        if (event.origin !== window.location.origin) return;
+  
+        const { token, username, email, source } = event.data || {};
+        if (source === 'google-auth') {
+          window.removeEventListener('message', messageListener);
+          resolve({
+            ok: true,
+            token,
+            username,
+            email,
+          });
+        }
+      };
+  
+      window.addEventListener('message', messageListener);
+    });
+  };
+  
 
   const startRegister = async ({ first_name, last_name, email, username, password }: RegisterForm): Promise<void> => {
     dispatch(onChecking()); 
@@ -94,6 +123,7 @@ export const useAuthStore = () => {
 
   const startLogout = (): void => {
     localStorage.clear();
+    dispatch( onLogoutBoards() );
     dispatch(onLogout());
   };
 
@@ -106,5 +136,5 @@ export const useAuthStore = () => {
     startRegister,
     checkAuthToken,
     startLogout,
-  };
+    signInWithGoogle  };
 };

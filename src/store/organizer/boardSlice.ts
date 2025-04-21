@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { BoardDTO } from '../../hooks';
+import {BoardDTO} from '../../management';
 
 interface BoardState {
     isLoadingBoards: boolean;
@@ -45,6 +45,11 @@ export const boardSlice = createSlice({
                 }
             });
         },
+        onLogoutBoards: (state) => {
+            state.isLoadingBoards = true;
+            state.boards = [];
+            state.activeBoard = null;
+        },
     },
 });
 
@@ -54,6 +59,7 @@ export const {
     onUpdateBoard,
     onDeleteBoard,
     onLoadboards,
+    onLogoutBoards,
 } = boardSlice.actions;
 
 export default boardSlice;

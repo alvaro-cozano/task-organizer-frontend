@@ -18,8 +18,12 @@ export * from './organizer/components/status/StatusModal';
 export * from './organizer/pages/BoardPage';
 export * from './organizer/pages/CardPage';
 
-export * from './organizer/types/BoardDTO';
-export * from './organizer/types/CardDTO';
-export * from './organizer/types/StatusDTO';
+export * from './types/BoardDTO';
+export * from './types/CardDTO';
+export * from './types/StatusDTO';
+export * from './types/UserDTO';
+
+export { default as CalendarPage } from './calendar/pages/CalendarPage';
+export * from './calendar/pages/CalendarPage';
 
 export * from './routes/ManagementRoutes';
