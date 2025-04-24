@@ -1,12 +1,9 @@
 import { useEffect, FormEvent, ChangeEvent } from 'react';
-
 import { Link as RouterLink } from 'react-router-dom';
-import { Link } from "@mui/material"
+import { Link } from "@mui/material";
 import Swal from 'sweetalert2';
-
 import { useAuthStore, useForm } from '../../hooks';
-
-import './AuthPage.css';
+import "./AuthPage.css";
 
 interface RegisterFormFields {
   registerFirstName: string;
@@ -71,81 +68,59 @@ export const RegisterPage = () => {
   }, [errorMessage]);
 
   return (
-    <div className="container login-container">
-      <div className="row">
-        <div className="col-md-6 login-form-2">
-          <h3>Registro</h3>
+    <div className="register-page">
+      <div className="container d-flex justify-content-center align-items-center min-vh-100">
+        <div className="register-form-2 p-4">
+          <h3 className="custom-title">Registro</h3>
           <form onSubmit={registerSubmit}>
-            <div className="form-group mb-2">
+            <div className="form-group">
+              <label htmlFor="registerUsername" className="form-label">Usuario</label>
               <input
                 type="text"
                 className="form-control"
-                placeholder="Nombre"
-                name="registerFirstName"
-                value={registerFirstName}
-                onChange={onRegisterInputChange}
-              />
-            </div>
-            <div className="form-group mb-2">
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Apellido"
-                name="registerLastName"
-                value={registerLastName}
-                onChange={onRegisterInputChange}
-              />
-            </div>
-            <div className="form-group mb-2">
-              <input
-                type="email"
-                className="form-control"
-                placeholder="Correo"
-                name="registerEmail"
-                value={registerEmail}
-                onChange={onRegisterInputChange}
-              />
-            </div>
-            <div className="form-group mb-2">
-              <input
-                type="username"
-                className="form-control"
-                placeholder="Usuario"
                 name="registerUsername"
                 value={registerUsername}
                 onChange={onRegisterInputChange}
               />
             </div>
-            <div className="form-group mb-2">
+            <div className="form-group">
+              <label htmlFor="registerEmail" className="form-label">Correo electrónico</label>
+              <input
+                type="email"
+                className="form-control"
+                name="registerEmail"
+                value={registerEmail}
+                onChange={onRegisterInputChange}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="registerPassword" className="form-label">Contraseña</label>
               <input
                 type="password"
                 className="form-control"
-                placeholder="Contraseña"
                 name="registerPassword"
                 value={registerPassword}
                 onChange={onRegisterInputChange}
               />
             </div>
-            <div className="form-group mb-2">
+            <div className="form-group">
+              <label htmlFor="registerPassword2" className="form-label">Repetir contraseña</label>
               <input
                 type="password"
                 className="form-control"
-                placeholder="Repita la contraseña"
                 name="registerPassword2"
                 value={registerPassword2}
                 onChange={onRegisterInputChange}
               />
             </div>
-            <div className="form-group mb-2">
-              <input
-                type="submit"
-                className="btnSubmit"
-                value="Crear cuenta"
-              />
+            <div className="form-group">
+              <button type="submit" className="btnSubmit w-100">
+                Aceptar
+              </button>
             </div>
           </form>
-          <Link component={RouterLink} color='inherit' to="/auth/login">
-            Iniciar sesión
+          <Link component={RouterLink} to="/auth/login" className="MuiLink-root">
+            ¿Ya tienes cuenta? Inicia sesión
           </Link>
         </div>
       </div>
