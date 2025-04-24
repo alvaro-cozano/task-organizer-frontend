@@ -26,4 +26,6 @@ export * from './types/UserDTO';
 export { default as CalendarPage } from './calendar/pages/CalendarPage';
 export * from './calendar/pages/CalendarPage';
 
+export * from './types/GoogleTokenResponse'
+
 export * from './routes/ManagementRoutes';

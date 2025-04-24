@@ -1,15 +1,9 @@
 import { useEffect, FormEvent, ChangeEvent } from 'react';
-
 import { Link as RouterLink } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { Link, Button, Typography } from '@mui/material';
 import Swal from 'sweetalert2';
-import { Google } from "@mui/icons-material"
-
+import { Google } from "@mui/icons-material";
 import { useAuthStore, useForm } from '../../hooks';
-import { AppDispatch, onLogin } from '../../store';
-
-import './AuthPage.css';
 
 interface LoginFormFields {
   loginEmail: string;
@@ -22,8 +16,7 @@ const loginFormFields: LoginFormFields = {
 };
 
 export const LoginPage = () => {
-  const { startLogin, signInWithGoogle, errorMessage } = useAuthStore();
-  const dispatch: AppDispatch = useDispatch();
+  const { startLogin, googleLogin, errorMessage } = useAuthStore();
 
   const {
     loginEmail,
@@ -46,18 +39,6 @@ export const LoginPage = () => {
     }
   }, [errorMessage]);
 
-  const onGoogleSignIn = async () => {
-    const result: any = await signInWithGoogle();
-  
-    if (result?.ok) {
-      localStorage.setItem('token', result.token);
-      localStorage.setItem('token-init-date', new Date().getTime().toString());
-      dispatch(onLogin({ username: result.username, email: result.email }));
-    } else {
-      Swal.fire('Error', result?.errorMessage || 'No se pudo iniciar sesión con Google', 'error');
-    }
-  };
-
   return (
     <div className="container login-container">
       <div className="row">
@@ -77,7 +58,7 @@ export const LoginPage = () => {
             <div className="form-group mb-2">
               <input
                 type="password"
-                className="form-control"
+                className="form-control"  
                 placeholder="Introduzca su contraseña"
                 name="loginPassword"
                 value={loginPassword}
@@ -97,8 +78,8 @@ export const LoginPage = () => {
                 <Button
                   variant="contained"
                   fullWidth
-                  onClick={onGoogleSignIn}
                   startIcon={<Google />}
+                  onClick={() => googleLogin()}
                 >
                   <Typography sx={{ ml: 1 }}>Google</Typography>
                 </Button>

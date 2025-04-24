@@ -41,8 +41,6 @@ npm i react-datepicker
 # Dependencias para autenticación con Google
 
 npm install @react-oauth/google
-npm list @react-oauth/google
-npm install typescript@latest --save-dev
 
 # Dependencias para el calendario
 

@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
+import { useGoogleLogin } from '@react-oauth/google';
 
 import { springApi } from "../api";
 import { 
@@ -11,6 +12,8 @@ import {
   AppDispatch,
   onLogoutBoards,
 } from "../store";
+import { GoogleTokenResponse } from "../management";
+import Swal from "sweetalert2";
 
 interface LoginForm {
   email: string;
@@ -51,32 +54,29 @@ export const useAuthStore = () => {
     }
   };
 
-  const signInWithGoogle = async () => {
-    return new Promise((resolve) => {
-      window.open(
-        `${import.meta.env.VITE_API_URL}/oauth2/authorization/google`,
-        'googleLogin',
-        'width=500,height=600'
-      );
+  const googleLogin = useGoogleLogin({
+    flow: 'implicit',
+    onSuccess: async (tokenResponse: GoogleTokenResponse) => {
+      const accessToken = tokenResponse.access_token; 
+      try {
+        const { data } = await springApi.post<AuthResponse>('/auth/login/google', {
+          accessToken,
+        });
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('token-init-date', new Date().getTime().toString());
+        dispatch(onLogin({ username: data.username, email: data.email }));
+      } catch (error) {
+        console.error('Error durante la autenticación con Google:', error);
+        Swal.fire('Error', 'No se pudo autenticar con Google', 'error');
+      }
+    },
+    onError: (error: Error) => {
+      console.error('Error al intentar autenticar con Google:', error);
+      Swal.fire('Error', 'No se pudo autenticar con Google', 'error');
+    },
+  });
   
-      const messageListener = (event: MessageEvent) => {
-        if (event.origin !== window.location.origin) return;
   
-        const { token, username, email, source } = event.data || {};
-        if (source === 'google-auth') {
-          window.removeEventListener('message', messageListener);
-          resolve({
-            ok: true,
-            token,
-            username,
-            email,
-          });
-        }
-      };
-  
-      window.addEventListener('message', messageListener);
-    });
-  };
   
 
   const startRegister = async ({ first_name, last_name, email, username, password }: RegisterForm): Promise<void> => {
@@ -136,5 +136,6 @@ export const useAuthStore = () => {
     startRegister,
     checkAuthToken,
     startLogout,
-    signInWithGoogle  };
+    googleLogin,
+  };
 };
