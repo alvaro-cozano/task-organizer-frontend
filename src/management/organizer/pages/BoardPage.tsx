@@ -35,7 +35,8 @@ export const BoardPage = () => {
     <>
       <Navbar />
 
-      <div className="container mt-4">
+      <div className="container pt-5 mt-4">
+
         <h1>Mis Tableros</h1>
 
         <div className="mb-3">

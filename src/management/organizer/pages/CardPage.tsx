@@ -49,7 +49,7 @@ export const CardPage = () => {
   return (
     <>
       <Navbar />
-      <div className="container my-4">
+      <div className="container pt-5 mt-4">
         <div className="mb-3">
           <button className="btn btn-secondary" onClick={() => navigate(`/boards`)}>Volver a los Tableros</button>
           <button className="btn btn-info ms-3" onClick={handleOpenStatusModal}>Gestionar Estados</button>

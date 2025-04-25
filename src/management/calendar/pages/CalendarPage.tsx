@@ -44,42 +44,42 @@ const CalendarPage = () => {
   return (
     <>
       <Navbar />
+      <div className="container-fluid" style={{ paddingTop: '80px', height: 'calc(100vh - 80px)' }}>
+        <Calendar
+          culture="es"
+          localizer={localizer}
+          defaultView={lastView}
+          events={transformCardsToEvents()}
+          startAccessor="start"
+          endAccessor="end"
+          style={{ height: 'calc(100vh - 80px)' }}
+          messages={getMessagesES()}
 
-      <Calendar
-        culture="es"
-        localizer={localizer}
-        defaultView={lastView}
-        events={transformCardsToEvents()}
-        startAccessor="start"
-        endAccessor="end"
-        style={{ height: 'calc(100vh - 80px)' }}
-        messages={getMessagesES()}
+          view={lastView}
+          date={currentDate}
 
-        view={lastView}
-        date={currentDate}
+          onNavigate={(date: Date) => setCurrentDate(date)}
 
-        onNavigate={(date: Date) => setCurrentDate(date)}
-
-        components={{
-          event: ({ event }: { event: CardDTO }) => (
-            <CardItem card={event} onClick={() => onDoubleClick(event)} />
-          ),
-        }}
-        
-        onDoubleClickEvent={onDoubleClick}
-        onSelectEvent={onSelect}
-        onView={onViewChanged}
-      />
-
-      {isCardModalOpen && selectedCard && (
-        <CardModal
-          isOpen={isCardModalOpen}
-          closeModal={() => setIsCardModalOpen(false)}
-          card={selectedCard}
-          statuses={statuses}
+          components={{
+            event: ({ event }: { event: CardDTO }) => (
+              <CardItem card={event} onClick={() => onDoubleClick(event)} />
+            ),
+          }}
+          
+          onDoubleClickEvent={onDoubleClick}
+          onSelectEvent={onSelect}
+          onView={onViewChanged}
         />
-      )}
-      
+
+        {isCardModalOpen && selectedCard && (
+          <CardModal
+            isOpen={isCardModalOpen}
+            closeModal={() => setIsCardModalOpen(false)}
+            card={selectedCard}
+            statuses={statuses}
+          />
+        )}
+      </div>
     </>
   );
 };
