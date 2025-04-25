@@ -37,7 +37,6 @@ export const useStatusStore = () => {
       const { data } = await springApi.post('/status', status);
       dispatch(addStatus(data));
     } catch (err: any) {
-      console.log(err);
       const errorMessage = err?.response?.data?.message || 'Ya existe un estado con ese nombre en este tablero';
       Swal.fire({
         icon: 'error',
@@ -55,7 +54,6 @@ export const useStatusStore = () => {
       const { data } = await springApi.put(`/status/${status.id}`, status);
       dispatch(updateStatus(data));
     } catch (err: any) {
-      console.log(err);
       const errorMessage = err?.response?.data?.message || 'Ya existe un estado con ese nombre en este tablero';
       Swal.fire({
         icon: 'error',

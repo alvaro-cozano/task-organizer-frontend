@@ -4,6 +4,8 @@ import Swal from 'sweetalert2';
 import { useBoardStore, useAuthStore } from '../../../../hooks';
 import { BoardDTO } from '../../../../management';
 
+import '../../style/BoardModal.css';
+
 interface BoardModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -107,7 +109,7 @@ const BoardModal: React.FC<BoardModalProps> = ({ isOpen, onClose, boardToEdit, b
   if (!isOpen) return null;
 
   return (
-    <div className="modal fade show" style={{ display: 'block' }} tabIndex={-1} aria-labelledby="boardModal">
+    <div className={`modal fade ${isOpen ? 'show d-block' : ''}`} tabIndex={-1} aria-labelledby="boardModal">
       <div className="modal-dialog modal-lg">
         <div className="modal-content">
           <div className="modal-header">
@@ -131,7 +133,7 @@ const BoardModal: React.FC<BoardModalProps> = ({ isOpen, onClose, boardToEdit, b
             <div className="mb-3">
               <label className="form-label">Correos de los usuarios:</label>
               {users.map((user, index) => (
-                <div key={index} style={{ marginBottom: '10px' }}>
+                <div key={index} className="input-group mb-2">
                   <input
                     type="email"
                     className="form-control"
@@ -142,18 +144,18 @@ const BoardModal: React.FC<BoardModalProps> = ({ isOpen, onClose, boardToEdit, b
                     placeholder={user.email === currentUserEmail ? currentUsername : "Introduce el correo del usuario"}
                   />
                   {user.email !== currentUserEmail && (
-                    <button type="button" onClick={() => handleRemoveUser(index)}>-</button>
+                    <button type="button" className="btn btn-danger" onClick={() => handleRemoveUser(index)}>-</button>
                   )}
                 </div>
               ))}
-              <button type="button" onClick={handleAddUser}>Añadir Usuario</button>
+              <button type="button" className="btn btn-outline-primary" onClick={handleAddUser}>Añadir Usuario</button>
             </div>
 
             <div>
               <h5>Tableros actuales:</h5>
               {boards.length > 0 ? (
                 boards.map((board) => (
-                  <div key={board.id} className="mb-3">
+                  <div key={board.id} className="mb-2 p-2 border rounded">
                     <div className="d-flex justify-content-between align-items-center">
                       <span>{board.boardName}</span>
                       <div>

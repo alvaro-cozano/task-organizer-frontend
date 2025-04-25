@@ -60,7 +60,6 @@ export const useCardStore = () => {
   
       await startLoadingCardsByBoardAndStatus(board_id, status_id);
     } catch (error: any) {
-      console.error(error);
       Swal.fire('Error al eliminar', error.response?.data?.msg || 'Error desconocido', 'error');
     }
   };
@@ -70,7 +69,6 @@ export const useCardStore = () => {
       const { data } = await springApi.get('/cards/my-cards');
       dispatch(onLoadCards(data));
     } catch (error) {
-      console.error('Error al cargar tus tarjetas', error);
     }
   };
 
@@ -86,7 +84,6 @@ export const useCardStore = () => {
 
       dispatch(onLoadCardsByStatus({ cards: cardsWithDates, statusId }));
     } catch (error: any) {
-      console.error(error);
     }
   };
   

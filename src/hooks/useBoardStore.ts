@@ -55,7 +55,6 @@ export const useBoardStore = () => {
             dispatch(onDeleteBoard(boardId));
             await startLoadingBoards();
         } catch (error: any) {
-            console.error(error);
             Swal.fire('Error al eliminar', error.response?.data?.msg || 'Error desconocido', 'error');
         }
     };

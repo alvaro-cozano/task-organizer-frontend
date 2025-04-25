@@ -84,9 +84,6 @@ export const Navbar = () => {
           </div>
         </div>
       </nav>
-
-      <div className="mt-5 pt-4"></div>
-
     </>
   );
 };

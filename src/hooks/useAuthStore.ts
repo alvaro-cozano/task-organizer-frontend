@@ -66,7 +66,6 @@ export const useAuthStore = () => {
         localStorage.setItem('token-init-date', new Date().getTime().toString());
         dispatch(onLogin({ username: data.username, email: data.email }));
       } catch (error) {
-        console.error('Error durante la autenticación con Google:', error);
         Swal.fire('Error', 'No se pudo autenticar con Google', 'error');
       }
     },
@@ -94,7 +93,6 @@ export const useAuthStore = () => {
 
   const checkAuthToken = async (): Promise<void> => {
     if (status === 'not-authenticated') {
-      console.log('El usuario no está autenticado, no ejecutando checkAuthToken.');
       return;
     }
     const token = localStorage.getItem('token');
@@ -115,7 +113,6 @@ export const useAuthStore = () => {
       localStorage.setItem('token-init-date', new Date().getTime().toString());
       dispatch(onLogin({ username: data.username, email: data.email }));
     } catch (error) {
-      console.error('Error al renovar el token:', error);
       localStorage.clear();
       dispatch(onLogout());
     }
