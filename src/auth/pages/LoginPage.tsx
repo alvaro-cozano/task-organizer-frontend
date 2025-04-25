@@ -4,6 +4,7 @@ import { Link, Button, Typography } from '@mui/material';
 import Swal from 'sweetalert2';
 import { Google } from "@mui/icons-material";
 import { useAuthStore, useForm } from '../../hooks';
+import "./AuthPage.css";
 
 interface LoginFormFields {
   loginEmail: string;
@@ -40,55 +41,51 @@ export const LoginPage = () => {
   }, [errorMessage]);
 
   return (
-    <div className="container login-container">
-      <div className="row">
-        <div className="col-md-6 login-form-1">
-          <h3>Iniciar sesión</h3>
+    <div className="login-page">
+      <div className="container d-flex justify-content-center align-items-center min-vh-100">
+        <div className="login-form-1 p-4">
+          <h3 className="custom-title">Iniciar sesión</h3>
           <form onSubmit={loginSubmit}>
-            <div className="form-group mb-2">
+            <div className="form-group">
+              <label htmlFor="loginEmail" className="form-label">Usuario o correo</label>
               <input
                 type="text"
                 className="form-control"
-                placeholder="Introduzca su usuario o correo"
                 name="loginEmail"
+                id="loginEmail"
                 value={loginEmail}
                 onChange={onLoginInputChange}
               />
             </div>
-            <div className="form-group mb-2">
+            <div className="form-group">
+              <label htmlFor="loginPassword" className="form-label">Contraseña</label>
               <input
                 type="password"
-                className="form-control"  
-                placeholder="Introduzca su contraseña"
+                className="form-control"
                 name="loginPassword"
+                id="loginPassword"
                 value={loginPassword}
                 onChange={onLoginInputChange}
               />
             </div>
-            <div className="form-group mb-2">
-              <input
-                type="submit"
-                className="btnSubmit"
-                value="Login"
-              />
+            <div className="form-group">
+              <button type="submit" className="btnSubmit w-100">
+                Aceptar
+              </button>
             </div>
-            
-            <div className="button-container">
-              <div className="button-item">
-                <Button
-                  variant="contained"
-                  fullWidth
-                  startIcon={<Google />}
-                  onClick={() => googleLogin()}
-                >
-                  <Typography sx={{ ml: 1 }}>Google</Typography>
-                </Button>
-              </div>
+            <div className="button-container mt-3">
+              <Button
+                variant="contained"
+                fullWidth
+                startIcon={<Google />}
+                onClick={() => googleLogin()}
+              >
+                <Typography sx={{ ml: 1 }}>Iniciar con Google</Typography>
+              </Button>
             </div>
-            
           </form>
-          <Link component={RouterLink} color='inherit' to="/auth/register">
-            Crear una cuenta
+          <Link component={RouterLink} to="/auth/register" className="MuiLink-root">
+            No tienes cuenta? Regístrate
           </Link>
         </div>
       </div>
