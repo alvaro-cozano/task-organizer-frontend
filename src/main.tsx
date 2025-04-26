@@ -10,6 +10,7 @@ import { store } from './store'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import 'gridstack/dist/gridstack.min.css';
 import './index.css'
 
 Modal.setAppElement('#root');

@@ -8,12 +8,11 @@ interface BoardCardProps {
 
 const BoardCard: React.FC<BoardCardProps> = ({ board, onClick }) => {
   return (
-    <div className="col-md-4 mb-3" onClick={onClick} style={{ cursor: 'pointer' }}>
-      <div className="card shadow-sm">
-        <div className="card-body">
-          <h5 className="card-title">{board.boardName}</h5>
-        </div>
-      </div>
+    <div
+      onClick={onClick}
+      className="w-full h-full p-1 flex flex-col justify-center items-center bg-white rounded-lg shadow-md hover:shadow-lg transition-all cursor-pointer"
+    >
+      <h5 className="text-lg font-semibold text-center">{board.boardName}</h5>
     </div>
   );
 };

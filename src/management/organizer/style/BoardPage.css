@@ -1,0 +1,21 @@
+.grid-stack-item-content {
+    margin: 5px;
+    padding: 10px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .grid-stack-placeholder > .placeholder-content {
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 2px dashed #555;
+    height: 100%;
+    width: 100%;
+    border-radius: 8px;
+  }
+  
+  .grid-stack-item {
+    transition: all 0.5s ease-in-out;
+  }
+  

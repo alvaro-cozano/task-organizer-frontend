@@ -36,11 +36,7 @@ const BoardModal: React.FC<BoardModalProps> = ({ isOpen, onClose, boardToEdit, b
   const handleSave = async () => {
     try {
       await startSavingBoard({ id: editingBoard?.id || 0, boardName, users });
-      if (!editingBoard) {
-        resetModal();
-      } else {
-        resetForm();
-      }
+      resetModal();
     } catch (error: any) {
       Swal.fire({
         icon: 'error',
@@ -109,92 +105,95 @@ const BoardModal: React.FC<BoardModalProps> = ({ isOpen, onClose, boardToEdit, b
   if (!isOpen) return null;
 
   return (
-    <div className={`modal fade ${isOpen ? 'show d-block' : ''}`} tabIndex={-1} aria-labelledby="boardModal">
-      <div className="modal-dialog modal-lg">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title" id="boardModal">
-              {editingBoard ? 'Editar Tablero' : 'Nuevo Tablero'}
-            </h5>
-            <button type="button" className="btn-close" aria-label="Cerrar" onClick={resetModal}></button>
-          </div>
-          <div className="modal-body">
-            <div className="mb-3">
-              <label className="form-label">Nombre del Tablero</label>
-              <input
-                type="text"
-                className="form-control"
-                value={boardName}
-                onChange={(e) => setBoardName(e.target.value)}
-                placeholder="Introduce el nombre del tablero"
-              />
+    <>
+      <div className="modal fade show d-block" tabIndex={-1} aria-labelledby="boardModal" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+        <div className="modal-dialog modal-lg">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="boardModal">
+                {editingBoard ? 'Editar Tablero' : 'Nuevo Tablero'}
+              </h5>
+              <button type="button" className="btn-close" aria-label="Cerrar" onClick={resetModal}></button>
             </div>
 
-            <div className="mb-3">
-              <label className="form-label">Correos de los usuarios:</label>
-              {users.map((user, index) => (
-                <div key={index} className="input-group mb-2">
-                  <input
-                    type="email"
-                    className="form-control"
-                    value={user.email || ''}
-                    onChange={(e) => handleEmailChange(index, e.target.value)}
-                    required
-                    disabled={user.email === currentUserEmail}
-                    placeholder={user.email === currentUserEmail ? currentUsername : "Introduce el correo del usuario"}
-                  />
-                  {user.email !== currentUserEmail && (
-                    <button type="button" className="btn btn-danger" onClick={() => handleRemoveUser(index)}>-</button>
-                  )}
-                </div>
-              ))}
-              <button type="button" className="btn btn-outline-primary" onClick={handleAddUser}>Añadir Usuario</button>
-            </div>
+            <div className="modal-body">
+              <div className="mb-3">
+                <label className="form-label">Nombre del Tablero</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={boardName}
+                  onChange={(e) => setBoardName(e.target.value)}
+                  placeholder="Introduce el nombre del tablero"
+                />
+              </div>
 
-            <div>
-              <h5>Tableros actuales:</h5>
-              {boards.length > 0 ? (
-                boards.map((board) => (
-                  <div key={board.id} className="mb-2 p-2 border rounded">
-                    <div className="d-flex justify-content-between align-items-center">
-                      <span>{board.boardName}</span>
-                      <div>
-                        <button
-                          className={`btn me-2 ${editingBoard?.id === board.id ? 'btn-info' : 'btn-warning'}`}
-                          onClick={() => handleEditClick(board)}
-                        >
-                          {editingBoard?.id === board.id ? 'Editando' : 'Editar'}
-                        </button>
-                        <button
-                          className="btn btn-danger"
-                          onClick={() => handleDelete(board.id ?? 0)}
-                        >
-                          Eliminar
-                        </button>
+              <div className="mb-3">
+                <label className="form-label">Correos de los usuarios:</label>
+                {users.map((user, index) => (
+                  <div key={index} className="input-group mb-2">
+                    <input
+                      type="email"
+                      className="form-control"
+                      value={user.email || ''}
+                      onChange={(e) => handleEmailChange(index, e.target.value)}
+                      required
+                      disabled={user.email === currentUserEmail}
+                      placeholder={user.email === currentUserEmail ? currentUsername : "Introduce el correo del usuario"}
+                    />
+                    {user.email !== currentUserEmail && (
+                      <button type="button" className="btn btn-danger" onClick={() => handleRemoveUser(index)}>-</button>
+                    )}
+                  </div>
+                ))}
+                <button type="button" className="btn btn-outline-primary" onClick={handleAddUser}>Añadir Usuario</button>
+              </div>
+
+              <div>
+                <h5>Tableros actuales:</h5>
+                {boards.length > 0 ? (
+                  boards.map((board) => (
+                    <div key={board.id} className="mb-2 p-2 border rounded">
+                      <div className="d-flex justify-content-between align-items-center">
+                        <span>{board.boardName}</span>
+                        <div>
+                          <button
+                            className={`btn me-2 ${editingBoard?.id === board.id ? 'btn-info' : 'btn-warning'}`}
+                            onClick={() => handleEditClick(board)}
+                          >
+                            {editingBoard?.id === board.id ? 'Editando' : 'Editar'}
+                          </button>
+                          <button
+                            className="btn btn-danger"
+                            onClick={() => handleDelete(board.id ?? 0)}
+                          >
+                            Eliminar
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))
-              ) : (
-                <p>No hay tableros disponibles.</p>
-              )}
+                  ))
+                ) : (
+                  <p>No hay tableros disponibles.</p>
+                )}
+              </div>
             </div>
-          </div>
 
-          <div className="modal-footer">
-            <button type="button" className="btn btn-secondary" onClick={resetModal}>Cerrar</button>
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={handleSave}
-              disabled={isSaveDisabled()}
-            >
-              {editingBoard ? 'Actualizar' : 'Crear'}
-            </button>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-secondary" onClick={resetModal}>Cerrar</button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={handleSave}
+                disabled={isSaveDisabled()}
+              >
+                {editingBoard ? 'Actualizar' : 'Crear'}
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
