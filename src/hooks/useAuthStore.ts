@@ -29,6 +29,7 @@ interface RegisterForm {
 }
 
 interface AuthResponse {
+  id: number;
   token: string;
   username: string;
   email: string;
@@ -45,7 +46,7 @@ export const useAuthStore = () => {
       const { data } = await springApi.post<AuthResponse>('/login', { email, password });
       localStorage.setItem('token', data.token);
       localStorage.setItem('token-init-date', new Date().getTime().toString());
-      dispatch(onLogin({ username: data.username, email: data.email }));
+      dispatch(onLogin({ id: data.id, username: data.username, email: data.email }));
     } catch (error: any) {
       dispatch(onLogout('Credenciales incorrectas'));
       setTimeout(() => {
@@ -64,7 +65,7 @@ export const useAuthStore = () => {
         });
         localStorage.setItem('token', data.token);
         localStorage.setItem('token-init-date', new Date().getTime().toString());
-        dispatch(onLogin({ username: data.username, email: data.email }));
+        dispatch(onLogin({ id: data.id, username: data.username, email: data.email }));
       } catch (error) {
         Swal.fire('Error', 'No se pudo autenticar con Google', 'error');
       }
@@ -111,7 +112,7 @@ export const useAuthStore = () => {
   
       localStorage.setItem('token', data.token);
       localStorage.setItem('token-init-date', new Date().getTime().toString());
-      dispatch(onLogin({ username: data.username, email: data.email }));
+      dispatch(onLogin({ id: data.id, username: data.username, email: data.email }));
     } catch (error) {
       localStorage.clear();
       dispatch(onLogout());

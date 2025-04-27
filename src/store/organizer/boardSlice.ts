@@ -38,12 +38,7 @@ export const boardSlice = createSlice({
         },
         onLoadboards: (state, action: PayloadAction<BoardDTO[]>) => {
             state.isLoadingBoards = false;
-            action.payload.forEach(board => {
-                const exists = state.boards.some(dbBoard => dbBoard.id === board.id);
-                if (!exists) {
-                    state.boards.push(board);
-                }
-            });
+            state.boards = action.payload;
         },
         onLogoutBoards: (state) => {
             state.isLoadingBoards = true;

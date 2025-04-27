@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 interface AuthState {
   status: 'checking' | 'authenticated' | 'not-authenticated';
   user: { 
+    id: number;
     username: string;
     email: string;
   } | null;
@@ -22,11 +23,11 @@ const authSlice = createSlice({
     onChecking: (state) => {
       state.status = 'checking';
     },
-    onLogin: (state, action: PayloadAction<{ username: string; email: string  }>) => {
+    onLogin: (state, action: PayloadAction<{ id: number; username: string; email: string }>) => {
       state.status = 'authenticated';
       state.user = action.payload;
       state.errorMessage = undefined;
-    },
+    },    
     onLogout: (state, action: PayloadAction<string | undefined>) => {
       state.status = 'not-authenticated';
       state.user = null;

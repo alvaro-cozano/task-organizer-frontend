@@ -63,6 +63,7 @@ export const useBoardStore = () => {
     const startLoadingBoards = async () => {
         try {
             const { data } = await springApi.get('/boards/my-boards');
+            console.log('Tableros ordenados desde el backend:', data);
             dispatch(onLoadboards(data));
         } catch (error) {
             console.error('Error al cargar tableros', error);

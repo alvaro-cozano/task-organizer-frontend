@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
-import { authSlice, boardSlice, cardSlice, statusSlice } from "../store";
+import { authSlice, boardSlice, cardSlice, statusSlice, userBoardSlice } from "../store";
 
 export const store = configureStore({
   reducer: {
@@ -9,6 +9,7 @@ export const store = configureStore({
     board: boardSlice.reducer,
     card: cardSlice.reducer,
     status: statusSlice.reducer,
+    userBoard: userBoardSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

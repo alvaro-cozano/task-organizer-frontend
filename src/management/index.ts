@@ -28,4 +28,6 @@ export * from './calendar/pages/CalendarPage';
 
 export * from './types/GoogleTokenResponse'
 
+export * from './types/UserBoardDTO';
+
 export * from './routes/ManagementRoutes';
