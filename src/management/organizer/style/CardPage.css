@@ -1,0 +1,349 @@
+.cardpage-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  margin-top: 56px;
+  height: calc(100vh - 56px);
+  transition: box-shadow 0.3s ease;
+  background-image: url('../../icons/FondoDegradado.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  z-index: 0;
+}
+
+.cardpage-header {
+  display: flex;
+  gap: 10px;
+  margin-left: 1rem;
+}
+
+.cardpage-header-title {
+  font-size: 1.5rem;
+  color: #fff;
+  margin: 0;
+}
+
+.cardpage-columns-scrollbar-wrapper {
+  position: relative;
+  margin-top: 5px;
+}
+
+.cardpage-columns-scrollbar {
+  overflow-x: auto;
+  width: auto;
+  max-width: 100%;
+  height: 20px;
+  background: transparent;
+  transition: max-width 0.3s, width 0.3s;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-radius: 6px;
+}
+
+.cardpage-columns {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  width: auto;
+  max-width: 100%;
+  z-index: 2;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 1rem;
+  align-items: flex-start;
+}
+
+.cardpage-columns::-webkit-scrollbar {
+  display: none;
+}
+
+.cardpage-status-column {
+  min-width: 16rem;
+  background-color: #2a2a2a;
+  border-radius: 12px;
+  box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.6),
+             -6px -6px 12px rgba(255, 255, 255, 0.1);
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 0 1rem;
+}
+
+.cardpage-status-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  border-bottom: 1px solid #444;
+  background-color: #2a2a2a;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.cardpage-status-title {
+  font-size: 1.2rem;
+  color: #f0f0f0;
+  margin: 0;
+}
+
+.cardpage-status-menu {
+  position: relative;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+  z-index: 2;
+}
+
+.cardpage-status-menu:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.cardpage-menu-icon {
+  color: #f0f0f0;
+  font-size: 1.25rem;
+}
+
+.cardpage-menu-dropdown {
+  position: absolute;
+  top: 36px;
+  right: 0;
+  z-index: 4000;
+  background: #23222a;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  min-width: 140px;
+  padding: 8px 0;
+  display: flex;
+  flex-direction: column;
+  pointer-events: auto;
+}
+
+.cardpage-menu-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  color: #f0f0f0;
+  transition: background-color 0.2s;
+  cursor: pointer;
+}
+
+.cardpage-menu-item:hover {
+  background-color: #444;
+}
+
+.cardpage-menu-item-icon {
+  margin-right: 8px;
+  font-size: 1rem;
+}
+
+.cardpage-grid-stack {
+  min-height: auto;
+  overflow-y: auto;
+  padding: 0;
+}
+
+.cardpage-grid-stack:empty {
+  min-height: 1px;
+
+}
+
+.cardpage-grid-item.ui-draggable-dragging {
+  cursor: grabbing;
+  z-index: 1000;
+  transform: rotate(2deg) scale(1.02);
+}
+
+.cardpage-grid-item-content {
+  background-color: #333;
+  color: #fff;
+  border-radius: 1.25rem;
+  transition: box-shadow 0.3s ease;
+  margin-top: 0.6rem;
+}
+
+.cardpage-add-status-button {
+  background: transparent;
+  border: none;
+  margin-top: 0.2rem;
+  cursor: pointer;
+}
+
+.cardpage-icon-add-circle-box {
+  display: inline-block;
+}
+
+.cardpage-add-status-button .MuiSvgIcon-root {
+  color: #333;
+  background-color: white;
+  border-radius: 50%;
+}
+
+.cardpage-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.cardpage-container::-webkit-scrollbar-track {
+  background: #2e2e2e;
+  border-radius: 4px;
+}
+
+.cardpage-container::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 4px;
+}
+
+.cardpage-container::-webkit-scrollbar-thumb:hover {
+  background: #777;
+}
+
+.centered-logo-bg {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 24rem;
+  height: auto;
+  transform: translate(-50%, -50%);
+  opacity: 0.9;
+  z-index: -1;
+  pointer-events: none;
+  user-select: none;
+  filter:
+    drop-shadow(0 0 40px #ffffff34)
+    drop-shadow(0 0 80px #ffffff34);
+}
+
+/* FAB chat button */
+.cardpage-chat-fab {
+  position: fixed !important;
+  top: 65px;
+  right: 32px;
+  border-radius: 50% !important;
+  min-width: 50px !important;
+  min-height: 50px !important;
+  width: 40px !important;
+  height: 40px !important;
+  background: #fff !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12) !important;
+  z-index: 800 !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+.cardpage-chat-fab-icon {
+  font-size: 22px;
+  color: #1976d2;
+  line-height: 1;
+}
+
+/* Header title flex */
+.cardpage-header-title-flex {
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Scrollbar and columns dynamic width for chat */
+.cardpage-columns-scrollbar-dynamic {
+  transition: max-width 0.3s, width 0.3s;
+}
+.cardpage-columns-dynamic {
+  transition: max-width 0.3s, width 0.3s;
+}
+.cardpage-chat-open.cardpage-columns-scrollbar-dynamic,
+.cardpage-chat-open.cardpage-columns-dynamic {
+  max-width: 75vw !important;
+  width: 75vw !important;
+}
+.cardpage-columns-scrollbar-inner {
+  width: 100%;
+  height: 8px;
+}
+
+/* Chat float overlay and panel */
+.cardpage-chat-float-bg {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.01);
+  z-index: 900;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  pointer-events: none;
+}
+.cardpage-chat-float-panel {
+  margin: 56px 0 0 0;
+  background: #fff;
+  border-radius: 12px 0 0 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+  width: 25vw;
+  min-width: 320px;
+  height: calc(100vh - 56px);
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  pointer-events: auto;
+}
+
+/* Quick create card menu */
+.cardpage-quick-create-menu-float {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.25);
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cardpage-quick-create-menu {
+  background: #222127;
+  color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  padding: 24px;
+  min-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.cardpage-quick-create-label {
+  margin-bottom: 4px;
+}
+.cardpage-quick-create-input {
+  background: #151419;
+  color: #fff;
+  border: 1px solid #444;
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 16px;
+}
+.cardpage-quick-create-btn-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+.cardpage-quick-create-btn-accept {
+  background: #01c3a8;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+.cardpage-quick-create-btn-cancel {
+  background: #444;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+}

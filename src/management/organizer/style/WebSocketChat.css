@@ -1,0 +1,164 @@
+.websocket-chat-root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  min-width: 320px;
+  background: #f4f6fb;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+}
+
+.websocket-chat-header {
+  flex: 0 0 auto;
+  padding: 18px 24px;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.websocket-chat-title {
+  margin: 0 !important;
+  font-weight: 700 !important;
+  color: #2d3748 !important;
+}
+
+.websocket-chat-close-btn {
+  min-width: 32px !important;
+}
+
+.websocket-chat-list-container {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 24px 16px;
+  background: #f4f6fb;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.websocket-chat-list {
+  padding: 0 !important;
+}
+
+.websocket-chat-message-row {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 8px;
+}
+.websocket-chat-message-own {
+  justify-content: flex-end;
+}
+
+.websocket-chat-avatar {
+  margin-right: 8px;
+  width: 32px !important;
+  height: 32px !important;
+  font-size: 16px !important;
+  background: #bdbdbd !important;
+}
+.websocket-chat-avatar-own {
+  margin-left: 8px;
+  margin-right: 0;
+  background: #3182ce !important;
+  color: #fff !important;
+}
+
+.websocket-chat-bubble {
+  background: #fff;
+  color: #2d3748;
+  border-radius: 16px;
+  padding: 10px 16px;
+  max-width: 70%;
+  box-shadow: 0 2px 8px rgba(160,174,192,0.08);
+  margin-left: 0;
+  margin-right: auto;
+}
+.websocket-chat-bubble-own {
+  background: #3182ce;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(49,130,206,0.08);
+  margin-left: auto;
+  margin-right: 0;
+}
+
+.websocket-chat-email {
+  font-weight: 600 !important;
+  font-size: 13px !important;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.websocket-chat-timestamp {
+  color: #888;
+  font-size: 11px;
+  margin-left: 8px;
+}
+.websocket-chat-timestamp-own {
+  color: #c3dafc;
+}
+
+.websocket-chat-content {
+  margin-top: 2px !important;
+  word-break: break-word !important;
+}
+
+.websocket-chat-footer {
+  flex: 0 0 auto;
+  padding: 18px 16px;
+  border-top: 1px solid #e0e0e0;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.websocket-chat-send-btn {
+  border-radius: 16px !important;
+  padding: 8px 20px !important;
+  font-weight: 700 !important;
+  background: #3182ce !important;
+  color: #fff !important;
+  box-shadow: 0 2px 8px rgba(49,130,206,0.08) !important;
+  text-transform: none !important;
+}
+
+@media (max-width: 600px) {
+  .websocket-chat-bubble,
+  .websocket-chat-bubble-own {
+    max-width: 90vw;
+    word-break: break-word;
+    padding: 8px 8px;
+    font-size: 15px;
+  }
+  .websocket-chat-email {
+    display: flex;
+    flex-direction: column;
+    word-break: break-all;
+    font-size: 12px !important;
+    align-items: flex-end;
+    width: 100%;
+  }
+  .websocket-chat-timestamp,
+  .websocket-chat-timestamp-own {
+    margin-left: 0;
+    margin-bottom: 2px;
+    align-self: flex-end;
+    font-size: 11px;
+    word-break: break-all;
+    display: block;
+    width: auto;
+    text-align: right;
+    padding-right: 0;
+  }
+}

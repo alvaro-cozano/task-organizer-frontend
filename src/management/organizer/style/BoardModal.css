@@ -1,0 +1,319 @@
+/* USER BOARD MODAL */
+.custom-user-board-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #2C3E50;
+  color: white;
+  border-radius: 10px;
+  padding: 20px;
+  width: 80%;
+  max-width: 600px;
+  max-height: 80vh;
+  z-index: 1000;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+}
+
+.custom-user-board-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 999;
+}
+
+.custom-user-board-modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  width: 100%;
+}
+
+.custom-user-board-modal-close-btn {
+  background-color: transparent;
+  border: none;
+  font-size: 24px;
+  color: white;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.custom-user-board-modal-close-btn:hover {
+  color: white;
+}
+
+.custom-user-board-modal-title {
+  font-size: 28px;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 10px;
+  position: sticky;
+  top: 0;
+  background-color: #2C3E50;
+  padding: 10px 0;
+  z-index: 1;
+}
+
+.custom-user-board-modal-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  overflow-y: auto;
+  max-height: 50vh;
+  padding-right: 10px;
+}
+
+.custom-user-board-modal-cell {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  color: black;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  border: 2px solid black;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s;
+}
+
+.custom-user-board-modal-cell:hover {
+  background-color: white;
+  border-color: white;
+}
+
+.custom-user-board-modal-profile-image {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  margin-right: 15px;
+  object-fit: cover;
+}
+
+.custom-user-board-modal-email {
+  font-size: 16px;
+  color: #2C3E50;
+  word-wrap: break-word;
+  white-space: nowrap;
+  font-weight: bold;
+}
+
+.transfer-admin-btn {
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 12px;
+  background-color: transparent;
+  border: 2px solid #007bff;
+  color: #007bff;
+  border-radius: 4px;
+  font-size: 18px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.transfer-admin-btn:hover {
+  background-color: #007bff;
+  color: white;
+  border-color: #0056b3;
+}
+
+.transfer-admin-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 0.25rem rgba(38, 143, 255, 0.5);
+}
+
+.custom-user-info-container {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.custom-user-board-modal-cell {
+  justify-content: space-between;
+}
+
+.custom-transfer-btn-container {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+}
+
+.user-board-search {
+  width: 100%;
+  max-width: 80%;
+}
+
+.user-board-search-input {
+  width: 100%;
+  padding: 10px 15px;
+  border-radius: 8px;
+  outline: none;
+  background-color: transparent;
+  color: white;
+}
+
+
+ /* BOARD MODAL */
+
+.user-board-modal-cell {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  color: black;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  border: 2px solid black;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s;
+}
+
+.user-board-modal-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  overflow-y: auto;
+  max-height: 50vh;
+  padding-right: 10px;
+}
+
+.user-board-modal-profile-image {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  margin-right: 10px;
+  border-radius: 50%;
+  border: 1px solid #000000;
+}
+
+.user-board-modal-email {
+  flex-grow: 1;
+}
+
+.email-suggestion-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  border: 1px solid #888888;
+  padding: 8px;
+  border-radius: 4px;
+  background-color: white;
+  color: black;
+  margin-right: 10px;
+}
+
+.email-suggestion-item {
+  width: 100%;
+}
+
+.email-suggestion-button {
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.board-modal-dialog {
+  width: 500px;
+  max-width: 100%;
+}
+
+.board-modal-body {
+  flex-grow: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.board-modal-suggestion-list,
+.user-board-modal-list {
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.board-modal-centered {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #2C3E50;
+  color: white;
+  border-radius: 10px;
+  padding: 20px;
+  width: 80%;
+  max-width: 600px;
+  max-height: 80vh;
+  z-index: 1000;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+}
+
+.board-modal-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.board-modal-close {
+  position: absolute;
+  top: 2.5rem;
+  right: 3rem;
+  color: white;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.board-modal-close:hover {
+  color: #ccc;
+}
+
+.board-modal-close:focus {
+  outline: none;
+}
+
+.board-modal-input {
+  width: 100%;
+  padding: 10px 15px;
+  border-radius: 8px;
+  outline: none;
+  background-color: transparent;
+  color: white;
+}
+
+.card-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.board-modal-overlay-bg {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+.board-modal-email-suggestion-container {
+  border: 1px solid #ccc;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.board-modal-suggestion-profile-image {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+}

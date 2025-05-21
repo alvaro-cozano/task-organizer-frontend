@@ -1,0 +1,100 @@
+.boardcard-person-icon {
+  color: #fff;
+  cursor: pointer;
+}
+
+.boardcard-user-count {
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.boardcard-title {
+  color: #fff !important;
+  font-size: 2rem;
+}
+
+.custom-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1040;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.boardcard-menu-icon,
+.boardcard-person-icon,
+.boardcard-menu-item-icon {
+  color: white !important;
+  cursor: pointer;
+}
+
+.boardcard-menu-dropdown {
+  position: absolute;
+  left: 0;
+  z-index: 1000;
+}
+
+.boardcard-menu-item {
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: white;
+  background-color: transparent;
+  transition: background-color 0.2s;
+}
+
+.boardcard-menu-item {
+  cursor: pointer;
+  color: white;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+}
+
+.boardcard-menu-item-icon {
+  margin-right: 8px;
+}
+
+.boardcard-menu-content {
+  display: inline-flex;
+  align-items: center;
+  border-bottom: 1px solid transparent;
+  padding-bottom: 2px;
+}
+
+.boardcard-edit:hover .boardcard-menu-content,
+.boardcard-delete:hover .boardcard-menu-content,
+.boardcard-exit:hover .boardcard-menu-content {
+  border-bottom: 1px solid #f9ecc5;
+  cursor: pointer;
+}
+
+.boardcard-exit .boardcard-menu-item-icon {
+  color: white !important;
+  cursor: pointer;
+}
+
+.boardcard-exit .boardcard-menu-content {
+  display: inline-flex;
+  align-items: center;
+  border-bottom: 1px solid transparent;
+  padding-bottom: 2px;
+}
+
+.boardcard-exit {
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: white;
+  background-color: transparent;
+}

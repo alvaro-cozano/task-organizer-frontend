@@ -1,0 +1,225 @@
+.pm-card-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.pm-card {
+  position: relative;
+  width: 18rem;
+  min-height: 7rem;
+  width: 100%;
+  display: grid;
+  place-content: center;
+  place-items: center;
+  text-align: center;
+  border-radius: 1.25rem;
+  border: 2px solid;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.pm-card-body {
+  position: absolute;
+  width: 100%;
+  display: block;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 0.3em 1em;
+  background: transparent !important;
+}
+
+.pm-card-header-row {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-size: 1.5rem;
+  margin-top: -3rem;
+  justify-content: flex-start;
+}
+
+.pm-card-title {
+  color: #fff;
+  font-size: 1.5rem;
+  margin-top: 0.2rem;
+  text-transform: capitalize;
+}
+
+.pm-card-progress {
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-right: 1.8rem;
+  position: relative;
+}
+
+.pm-progress-bar {
+  position: relative;
+  width: 100%;
+  background: #363636;
+  height: 0.313rem;
+  display: block;
+  border-radius: 3.125rem;
+  overflow: hidden;
+}
+
+.pm-progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  border-radius: 3.125rem;
+  transition: width 0.5s ease;
+}
+
+.pm-progress-label {
+  color: #fff;
+  text-align: left;
+  font-weight: 600;
+  width: 100%;
+  display: block;
+  margin-bottom: 0.313rem;
+}
+
+.pm-progress-percent {
+  position: absolute;
+  top: -0.5rem;
+  left: 100%;
+  margin-left: 1.4rem;
+  transform: translateX(-50%);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+
+.pm-card-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  border-top: 0.063rem solid #292929;
+  display: flex;
+  justify-content: space-between;
+  background: #151419;
+  padding: 0.5em 1em;
+  border-bottom-left-radius: 1.25rem;
+  border-bottom-right-radius: 1.25rem;
+  background: transparent !important;
+}
+
+.pm-user-list {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pm-user-item {
+  display: flex;
+  margin-right: -1.8rem;
+  z-index: 1;
+  position: relative;
+}
+
+.pm-user-item:first-child {
+  z-index: 3;
+}
+.pm-user-item:nth-child(2) {
+  z-index: 2;
+}
+.pm-user-item:nth-child(3) {
+  z-index: 1;
+}
+
+.pm-user-avatar {
+  border-radius: 50%;
+  width: 1.5rem;
+  height: 1.5rem;
+  object-fit: cover;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+}
+
+.pm-more-users {
+  width: 1.3rem;
+  height: 1.3rem;
+  border-radius: 50%;
+  background: #444;
+  margin-bottom: 0.4rem;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  margin-left: 0.8rem;
+}
+
+.pm-add-user-btn {
+  width: 1.2rem;
+  height: 1.2rem;
+  margin-left: 0.4rem;
+  border-radius: 50%;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pm-add-icon {
+  width: 0.8rem;
+}
+
+.pm-countdown-btn {
+  background: #222127;
+  color: #fff;
+  border-radius: 2em;
+  padding: 0.3rem 1rem;
+  font-size: 0.75rem;
+  transition: background-color 0.3s ease, color 0.3s;
+  text-decoration: none;
+  border: none;
+  outline: none;
+  display: inline-block;
+}
+
+.pm-countdown-btn.vencido {
+  color: var(--pm-card-border-color, #01c3a8) !important;
+  background: #222127 !important;
+}
+
+.pm-card-finished-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 2px solid #ccc;
+  border-radius: 0.25rem;
+  background-color: #151419;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: all 0.2s ease-in-out;
+  width: 1.1rem;
+  height: 1.1rem;
+  position: relative;
+}
+
+.pm-card-finished-checkbox:checked {
+  background-color: #151419;
+}
+
+.pm-card-finished-checkbox:checked::after {
+  content: '✓';
+  color: var(--pm-check-color, #01c3a8) !important;
+  font-size: 0.8rem;
+  font-weight: bold;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

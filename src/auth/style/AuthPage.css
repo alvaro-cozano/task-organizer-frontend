@@ -1,0 +1,206 @@
+.login-page,
+.register-page {
+  font-family: 'Arial', sans-serif;
+  color: white;
+  margin: 0;
+  padding: 0;
+  background-image: url('../../management/icons/FondoDegradado.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.login-page .container,
+.register-page .container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-page .login-form-1,
+.register-page .register-form-2 {
+  background-color: #242424;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow: auto;
+}
+
+.login-page .custom-title,
+.register-page .custom-title {
+  font-weight: 700;
+  color: white;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.login-page .form-group,
+.register-page .form-group {
+  margin-bottom: 0.5rem;
+}
+
+.login-page .form-control,
+.register-page .form-control {
+  background-color: #333;
+  color: white;
+  border: 1px solid #555;
+  border-radius: 5px !important;
+  padding: 10px;
+  font-size: 16px;
+  outline: none;
+}
+
+.login-page .form-control:focus,
+.register-page .form-control:focus {
+  border-color: #f9ecc5;
+  background-color: #444;
+  color: white;
+  box-shadow: none;
+}
+
+.login-page .form-group .input-group,
+.register-page .form-group .input-group {
+  position: relative;
+}
+
+.login-page .form-group .input-group .form-control,
+.register-page .form-group .input-group .form-control {
+  width: 100%;
+  padding-right: 3rem;
+}
+
+.login-page .form-group .input-group .MuiInputAdornment-root,
+.register-page .form-group .input-group .MuiInputAdornment-root {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.login-page .form-label,
+.register-page .form-label {
+  color: #f9ecc5;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.login-page .btnSubmit,
+.register-page .btnSubmit {
+  background-color: #333;
+  color: white;
+  font-weight: 700;
+  border: 2px solid #044C7E;
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+.login-page .btnSubmit:hover,
+.register-page .btnSubmit:hover {
+  background-color: #444;
+  color: white;
+  border-color: #044C7E;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.login-page .form-label,
+.register-page .form-label {
+  color: white;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+.login-page .button-container,
+.register-page .button-container {
+  margin-top: 20px;
+}
+
+.login-page .button-item,
+.register-page .button-item {
+  margin-bottom: 10px;
+}
+
+.login-page button.MuiButton-root,
+.register-page button.MuiButton-root {
+  background-color: #044C7E;
+  color: #fff;
+  font-weight: 700;
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-page button.MuiButton-root:hover,
+.register-page button.MuiButton-root:hover {
+  background-color: #033f67;
+}
+
+.login-page .MuiButton-startIcon,
+.register-page .MuiButton-startIcon {
+  color: white;
+}
+
+.login-page .MuiLink-root,
+.register-page .MuiLink-root {
+  display: block;
+  text-align: center;
+  margin-top: 15px;
+  color: #FFFFFF !important;
+  text-decoration: none;
+}
+
+.login-page .MuiLink-root:hover,
+.register-page .MuiLink-root:hover {
+  text-decoration: underline;
+  color: #f9ecc5 !important;
+}
+
+.logo-taskort {
+  width: 10rem;
+  max-width: 40vw;
+  height: auto;
+}
+
+.password-visibility-button {
+  color: white !important;
+}
+
+.password-popover-list-item {
+  padding: 0 !important;
+}
+
+.password-popover-list-item-icon {
+  min-width: 30px !important;
+}
+
+.custom-popover-paper {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.popover-content-wrapper {
+  margin-top: 16px;
+  padding: 8px;
+  background-color: #333;
+  color: white;
+  border-radius: 8px;
+}
+
+.password-popover-title {
+  padding-left: 8px;
+  font-weight: bold;
+}
