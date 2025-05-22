@@ -18,7 +18,7 @@
   max-height: 90vh !important;
   overflow-y: auto !important;
   margin-top: 3vh !important;
-  background-color: #444 !important;
+  background-color: #2C3E50 !important;
   color: #f0f0f0 !important;
   border: 1px solid #444 !important;
 }
@@ -53,7 +53,7 @@
 .custom-card-modal .form-control,
 .custom-card-modal .form-select,
 .custom-card-modal .react-datepicker-wrapper input {
-  background-color: #3a3a3a;
+  background-color: #213642;
   color: white;
   border: 1px solid #555;
   border-radius: 0.25rem;
@@ -69,7 +69,7 @@
 }
 
 .custom-card-modal .form-check-input {
-  background-color: #3a3a3a;
+  background-color: #213642;
   border-color: #555;
 }
 
@@ -134,10 +134,16 @@
   padding: 2px 8px;
 }
 
-.card-modal-overlay {
+.ReactModal__Overlay.card-modal-overlay {
   background-color: rgba(0, 0, 0, 0.5) !important;
   z-index: 1000 !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
 }
+
 .custom-card-modal {
   position: absolute !important;
   top: 50% !important;
@@ -186,7 +192,7 @@
 
 
 .custom-card-modal .card {
-  background-color: #383838;
+  background-color: #213642 !important;
   border: 1px solid #4f4f4f;
   margin-bottom: 1rem !important;
 }

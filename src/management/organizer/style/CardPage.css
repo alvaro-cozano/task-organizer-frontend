@@ -241,7 +241,6 @@
   line-height: 1;
 }
 
-/* Header title flex */
 .cardpage-header-title-flex {
   min-height: 40px;
   display: flex;
@@ -249,7 +248,6 @@
   gap: 12px;
 }
 
-/* Scrollbar and columns dynamic width for chat */
 .cardpage-columns-scrollbar-dynamic {
   transition: max-width 0.3s, width 0.3s;
 }
@@ -266,7 +264,6 @@
   height: 8px;
 }
 
-/* Chat float overlay and panel */
 .cardpage-chat-float-bg {
   position: fixed;
   top: 0; left: 0;
@@ -293,7 +290,6 @@
   pointer-events: auto;
 }
 
-/* Quick create card menu */
 .cardpage-quick-create-menu-float {
   position: fixed;
   top: 0; left: 0;
@@ -332,7 +328,7 @@
   margin-top: 8px;
 }
 .cardpage-quick-create-btn-accept {
-  background: #01c3a8;
+  background: #2C3E50;
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -346,4 +342,45 @@
   border-radius: 4px;
   padding: 8px 16px;
   cursor: pointer;
+}
+
+.cardpage-swal-popup {
+  background-color: #2a2a2a !important;
+  color: #f0f0f0 !important;
+  border-radius: 12px !important;
+}
+
+.cardpage-swal-title {
+  color: #f0f0f0 !important;
+}
+
+.cardpage-swal-html-container {
+  color: #f0f0f0 !important;
+}
+
+.cardpage-swal-input {
+  background-color: #1e1e1e !important;
+  color: #f0f0f0 !important;
+  border: 1px solid #555 !important;
+  border-radius: 4px !important;
+}
+
+.cardpage-swal-input:focus {
+  border-color: #2C3E50 !important;
+  box-shadow: 0 0 0 0.2rem #2C3E50 !important;
+}
+
+.cardpage-swal-confirm-button,
+.cardpage-swal-cancel-button {
+  border-radius: 4px !important;
+  padding: 0.5em 1.5em !important;
+  font-weight: 500 !important;
+}
+
+.cardpage-swal-confirm-button {
+  background-color: #2C3E50 !important;
+}
+
+.cardpage-swal-cancel-button {
+  background-color: #555 !important;
 }

@@ -121,7 +121,6 @@ export const LoginPage = () => {
       <div className="container d-flex justify-content-center align-items-center min-vh-100">
         <motion.div
           className="login-form-1 p-4 position-relative"
-          style={{ overflow: 'hidden' }}
           initial={{ scale: 0.95, opacity: 0 }}
           animate={animatingOut
             ? { scale: 0.90, opacity: 0, transition: { duration: CONTAINER_ANIM_DURATION_S, ease: "easeIn" } }

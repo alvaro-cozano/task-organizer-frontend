@@ -9,6 +9,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '@mui/material/Button';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import Swal from 'sweetalert2';
 
 import { useCardStore, useStatusStore, useBoardStore } from "../../../hooks";
 import { CardDTO, CardItem, Navbar, CardModal, WebSocketChat } from "../../../management";
@@ -342,6 +343,19 @@ export const CardPage = () => {
     }
   }, [boards, parsedBoardId, activeBoard, setActiveBoard]);
 
+  const swalDark = Swal.mixin({
+    customClass: {
+      popup: 'cardpage-swal-popup',
+      title: 'cardpage-swal-title',
+      htmlContainer: 'cardpage-swal-html-container',
+      confirmButton: 'cardpage-swal-confirm-button',
+      cancelButton: 'cardpage-swal-cancel-button',
+      input: 'cardpage-swal-input',
+    },
+    background: '#2a2a2a',
+    color: '#f0f0f0',
+  });
+
   return (
     <>
       <Navbar />
@@ -369,16 +383,30 @@ export const CardPage = () => {
               <AccessTimeIcon sx={{ fontSize: 80, color: '#bdbdbd' }} />
             )}
           </h1>
-          <button 
-            className="cardpage-add-status-button" 
+          <button
+            className="cardpage-add-status-button"
             onClick={async () => {
-              const nombre = prompt("Nombre del nuevo estado:");
-              if (!nombre || !nombre.trim()) return;
-              if (!parsedBoardId) return;
-              await restStatusStore.createStatus({
-                name: nombre.trim(),
-                boardId: parsedBoardId
+              const { value: nombre } = await swalDark.fire({
+                title: 'Crear Nuevo Estado',
+                input: 'text',
+                inputPlaceholder: 'Nombre del nuevo estado',
+                showCancelButton: true,
+                confirmButtonText: 'Crear',
+                cancelButtonText: 'Cancelar',
+                inputValidator: (value) => {
+                  if (!value || !value.trim()) {
+                    return '¡El nombre no puede estar vacío!';
+                  }
+                }
               });
+
+              if (nombre && nombre.trim()) {
+                if (!parsedBoardId) return;
+                await restStatusStore.createStatus({
+                  name: nombre.trim(),
+                  boardId: parsedBoardId
+                });
+              }
             }}
           >
             <span className="cardpage-icon-add-circle-box">
@@ -438,9 +466,27 @@ export const CardPage = () => {
                               onClick={async (e) => {
                                 e.stopPropagation();
                                 if (status.id === undefined) return;
-                                const nuevoNombre = prompt("Nuevo nombre del estado:", status.name);
+                                
+                                const { value: nuevoNombre } = await swalDark.fire({
+                                  title: 'Editar Nombre del Estado',
+                                  input: 'text',
+                                  inputValue: status.name,
+                                  inputPlaceholder: 'Nuevo nombre del estado',
+                                  showCancelButton: true,
+                                  confirmButtonText: 'Guardar',
+                                  cancelButtonText: 'Cancelar',
+                                  inputValidator: (value) => {
+                                    if (!value || !value.trim()) {
+                                      return '¡El nombre no puede estar vacío!';
+                                    }
+                                    if (value.trim() === status.name) {
+                                      return 'El nombre es el mismo.';
+                                    }
+                                  }
+                                });
+
                                 if (nuevoNombre && nuevoNombre.trim() && nuevoNombre !== status.name) {
-                                  await restStatusStore.modifyStatus({ ...status, name: nuevoNombre });
+                                  await restStatusStore.modifyStatus({ ...status, name: nuevoNombre.trim() });
                                 }
                                 setOpenMenuId(null);
                               }}
@@ -453,7 +499,19 @@ export const CardPage = () => {
                               onClick={async (e) => {
                                 e.stopPropagation();
                                 if (status.id === undefined) return;
-                                if (window.confirm("¿Seguro que quieres eliminar este estado?")) {
+
+                                const result = await swalDark.fire({
+                                  title: '¿Estás seguro que quieres eliminar el estado??',
+                                  text: "¡Todas las tarjetas asociadas se eliminarán y no podrás revertir este cambio!",
+                                  icon: 'warning',
+                                  showCancelButton: true,
+                                  confirmButtonText: 'Sí, ¡eliminar!',
+                                  cancelButtonText: 'Cancelar',
+                                  confirmButtonColor: '#d33',
+                                  cancelButtonColor: '#3085d6'
+                                });
+
+                                if (result.isConfirmed) {
                                   await restStatusStore.removeStatus(status.id);
                                 }
                                 setOpenMenuId(null);
