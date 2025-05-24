@@ -1,0 +1,52 @@
+.profile-page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-image: url('../../icons/FondoDegradado.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-top: 28px;
+}
+
+.subscription-card {
+  background-color: rgb(35, 35, 35);
+  color: white;
+  border-radius: 1rem;
+  border: 1px solid #444;
+}
+
+.subscription-card .card-title {
+  color: white;
+}
+
+.subscription-alert {
+  background-color: #2C3E50;
+  color: #f0f0f0;
+  border: 1px solid #444;
+  border-radius: 0.5rem;
+}
+
+.subscription-alert hr {
+  border-color: #444;
+}
+
+.subscription-list-item {
+  background-color: transparent;
+  color: #f0f0f0;
+  border: none;
+}
+
+.text-light-emphasis {
+  color: #f0f0f0 !important;
+}
+
+.text-muted-dark-theme {
+  color: #adb5bd !important;
+}
+
+.loading-text-dark-theme,
+.unauthenticated-text-dark-theme {
+  color: white;
+}

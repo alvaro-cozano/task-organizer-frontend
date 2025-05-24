@@ -27,6 +27,11 @@ export * from './organizer/components/card/CardModal';
 export * from './calendar/components/CalendarEvent';
 
 export * from './profile/pages/ProfilePage';
+export * from './profile/pages/SubscriptionPage';
+export * from './profile/components/CancelSub';
+export * from './profile/components/GetSub';
+export * from './profile/components/RenewSub';
+
 export * from './calendar/pages/CalendarPage';
 export * from './organizer/pages/BoardPage';
 export * from './organizer/pages/CardPage';

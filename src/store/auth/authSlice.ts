@@ -2,10 +2,11 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface AuthState {
   status: 'checking' | 'authenticated' | 'not-authenticated';
-  user: { 
+  user: {
     id: number;
     username: string;
     email: string;
+    roles?: string[];
   } | null;
   errorMessage: string | { message: string; email?: string } | undefined;
 }
@@ -22,12 +23,14 @@ const authSlice = createSlice({
   reducers: {
     onChecking: (state) => {
       state.status = 'checking';
+      state.user = null;
+      state.errorMessage = undefined;
     },
-    onLogin: (state, action: PayloadAction<{ id: number; username: string; email: string }>) => {
+    onLogin: (state, action: PayloadAction<{ id: number; username: string; email: string; roles?: string[] }>) => {
       state.status = 'authenticated';
       state.user = action.payload;
       state.errorMessage = undefined;
-    },    
+    },
     onLogout: (state, action: PayloadAction<string | { message: string; email?: string } | undefined>) => {
       state.status = 'not-authenticated';
       state.user = null;

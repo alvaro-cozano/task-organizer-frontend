@@ -4,12 +4,12 @@ import Swal from "sweetalert2";
 
 import { springApi } from "../api";
 import { GoogleTokenResponse, UserDTO } from "../management";
-import { 
-  clearErrorMessage, 
-  onChecking, 
-  onLogin, 
+import {
+  clearErrorMessage,
+  onChecking,
+  onLogin,
   onLogout,
-  RootState, 
+  RootState,
   AppDispatch,
   onLogoutBoards,
 } from "../store";
@@ -34,9 +34,31 @@ interface AuthResponse {
   email: string;
 }
 
+interface UserRolesResponse {
+  roles: string[];
+  username: string;
+}
+
 export const useAuthStore = () => {
   const { status, user, errorMessage } = useSelector((state: RootState) => state.auth);
   const dispatch: AppDispatch = useDispatch();
+
+  const internalFetchAndSetUserRoles = async (baseUser: { id: number; username: string; email: string }) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+
+      const { data: rolesData } = await springApi.get<UserRolesResponse>('/auth/user-roles', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      dispatch(onLogin({ ...baseUser, roles: rolesData.roles }));
+    } catch (error) {
+      console.error("Error fetching user roles:", error);
+    }
+  };
 
   const startLogin = async ({ email, password }: LoginForm): Promise<void> => {
     dispatch(onChecking());
@@ -44,7 +66,9 @@ export const useAuthStore = () => {
       const { data } = await springApi.post<AuthResponse>('/login', { email, password });
       localStorage.setItem('token', data.token);
       localStorage.setItem('token-init-date', new Date().getTime().toString());
-      dispatch(onLogin({ id: data.id, username: data.username, email: data.email }));
+      const baseUser = { id: data.id, username: data.username, email: data.email };
+      dispatch(onLogin(baseUser));
+      await internalFetchAndSetUserRoles(baseUser);
     } catch (error: any) {
       const backendMsg = error?.response?.data?.msg || error?.response?.data?.message || 'Credenciales incorrectas';
       const backendEmail = error?.response?.data?.email || '';
@@ -58,20 +82,24 @@ export const useAuthStore = () => {
   const googleLogin = useGoogleLogin({
     flow: 'implicit',
     onSuccess: async (tokenResponse: GoogleTokenResponse) => {
-      const accessToken = tokenResponse.access_token; 
+      const accessToken = tokenResponse.access_token;
       try {
         const { data } = await springApi.post<AuthResponse>('/auth/login/google', {
           accessToken,
         });
         localStorage.setItem('token', data.token);
         localStorage.setItem('token-init-date', new Date().getTime().toString());
-        dispatch(onLogin({ id: data.id, username: data.username, email: data.email }));
+        const baseUser = { id: data.id, username: data.username, email: data.email };
+        dispatch(onLogin(baseUser));
+        await internalFetchAndSetUserRoles(baseUser);
       } catch (error) {
         Swal.fire('Error', 'No se pudo autenticar con Google', 'error');
+        dispatch(onLogout({ message: 'Fallo en la autenticación con Google post-token.' }));
       }
     },
     onError: () => {
       Swal.fire('Error', 'No se pudo autenticar con Google', 'error');
+      dispatch(onLogout({ message: 'Error en el flujo de autenticación de Google.' }));
     },
   });
 
@@ -85,6 +113,7 @@ export const useAuthStore = () => {
         username,
         password,
       });
+      dispatch(onLogout(undefined));
       return;
     } catch (error: any) {
       const backendError = error?.response?.data;
@@ -104,10 +133,10 @@ export const useAuthStore = () => {
   const checkAuthToken = async (): Promise<boolean> => {
     const token = localStorage.getItem('token');
     if (!token) {
-      dispatch(onLogout());
+      dispatch(onLogout(undefined));
       return false;
     }
-  
+
     try {
       const { data } = await springApi.post<AuthResponse>('/auth/check-token', null, {
         headers: {
@@ -115,22 +144,24 @@ export const useAuthStore = () => {
           'Content-Type': 'application/json'
         }
       });
-  
+
       localStorage.setItem('token', data.token);
       localStorage.setItem('token-init-date', new Date().getTime().toString());
-      dispatch(onLogin({ id: data.id, username: data.username, email: data.email }));
+      const baseUser = { id: data.id, username: data.username, email: data.email };
+      dispatch(onLogin(baseUser));
+      await internalFetchAndSetUserRoles(baseUser);
       return true;
     } catch (error) {
       localStorage.clear();
-      dispatch(onLogout());
+      dispatch(onLogout(undefined));
       return false;
     }
-  };  
+  };
 
   const startLogout = (): void => {
     localStorage.clear();
-    dispatch( onLogoutBoards() );
-    dispatch(onLogout());
+    dispatch(onLogoutBoards());
+    dispatch(onLogout(undefined));
   };
 
   const getAllEmails = async (): Promise<UserDTO[]> => {
@@ -142,10 +173,6 @@ export const useAuthStore = () => {
     }
   };
 
-  /**
-   * @param email
-   * @returns {Promise<boolean>}
-  */
   const resendVerificationEmail = async (email: string): Promise<boolean> => {
     try {
       await springApi.post('/auth/resend-verification', { email });

@@ -1,6 +1,6 @@
 import { useNavigate, useLocation } from "react-router";
 import { GridView } from "@mui/icons-material";
-import { FaUser, FaSignOutAlt, FaUserEdit, FaCalendarAlt } from "react-icons/fa";
+import { FaUser, FaSignOutAlt, FaUserEdit, FaCalendarAlt, FaCreditCard } from "react-icons/fa";
 
 import { useAuthStore } from "../../hooks";
 
@@ -15,12 +15,15 @@ export const Navbar = () => {
   const handleCalendarClick = () => navigate("/calendar");
   const handleBackClick = () => navigate("/");
   const handleProfileClick = () => navigate("/profile");
+  const handleSubscriptionClick = () => navigate("/subscription");
 
   const isCalendarPage = location.pathname === "/calendar";
   const isProfilePage = location.pathname === "/profile";
+  const isSubscriptionPage = location.pathname === "/subscription";
   const isHomePage = location.pathname === "/";
 
-  const showDivider = !isProfilePage;
+  const showDividerAfterProfile = !isProfilePage && !isSubscriptionPage;
+  const showDividerAfterSubscription = !isSubscriptionPage;
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark fixed-top">
@@ -66,7 +69,15 @@ export const Navbar = () => {
                   </button>
                 </li>
               )}
-              {showDivider && <li><hr className="dropdown-divider" /></li>}
+              {showDividerAfterProfile && <li><hr className="dropdown-divider" /></li>}
+              {!isSubscriptionPage && (
+                <li>
+                  <button className="dropdown-item d-flex align-items-center" onClick={handleSubscriptionClick}>
+                    <FaCreditCard className="me-2 icon-size" /> Gestionar suscripción
+                  </button>
+                </li>
+              )}
+              {showDividerAfterSubscription && !isProfilePage && <li><hr className="dropdown-divider" /></li>}
               <li>
                 <button className="dropdown-item d-flex align-items-center" onClick={startLogout}>
                   <FaSignOutAlt className="me-2 icon-size" /> Cerrar sesión
@@ -128,7 +139,15 @@ export const Navbar = () => {
                       </button>
                     </li>
                   )}
-                  {showDivider && <li><hr className="dropdown-divider" /></li>}
+                  {showDividerAfterProfile && <li><hr className="dropdown-divider" /></li>}
+                  {!isSubscriptionPage && (
+                    <li>
+                      <button className="dropdown-item d-flex align-items-center" onClick={handleSubscriptionClick}>
+                        <FaCreditCard className="me-2 icon-size" /> Gestionar suscripción
+                      </button>
+                    </li>
+                  )}
+                   {showDividerAfterSubscription && !isProfilePage && <li><hr className="dropdown-divider" /></li>}
                   <li>
                     <button className="dropdown-item d-flex align-items-center" onClick={startLogout}>
                       <FaSignOutAlt className="me-2 icon-size" /> Cerrar sesión

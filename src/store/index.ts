@@ -7,6 +7,7 @@ export { default as userBoardSlice } from './organizer/userBoardSlice';
 export { default as labelSlice } from './organizer/labelSlice';
 export { default as checklistItemSlice } from './organizer/checklistItemSlice';
 export { default as checklistSubItemSlice } from './organizer/checklistSubItemSlice';
+export { default as stripeSlice } from './stripe/stripeSlice';
 
 export { default as profileSlice } from './profile/profileSlice';
 
@@ -19,6 +20,7 @@ export * from './organizer/userBoardSlice';
 export * from './organizer/labelSlice';
 export * from './organizer/checklistItemSlice';
 export * from './organizer/checklistSubItemSlice';
+export * from './stripe/stripeSlice';
 
 export * from './profile/profileSlice';
 
