@@ -14,9 +14,9 @@ export const CancelSub: React.FC<CancelSubProps> = ({
   isPremiumUser,
 }) => {
   return (
-    <>
+    <div className="subscription-card-component">
       <div 
-        className="text-center p-3 mb-4 subscription-alert" 
+        className="text-center p-3 mb-4 glasmorphism-effect" 
         role="alert"
       >
         <h4 className="alert-heading">¡Actualmente eres un usuario Premium!</h4>
@@ -27,7 +27,7 @@ export const CancelSub: React.FC<CancelSubProps> = ({
       </p>
       <div className="d-grid">
         <button
-          className="btn btn-danger btn-lg"
+          className="neumorphism-button neumorphism-button-danger"
           onClick={handleCancelSubscription}
           disabled={isCancelingSubscription || (!currentSubscriptionId && !isPremiumUser)}
         >
@@ -41,6 +41,6 @@ export const CancelSub: React.FC<CancelSubProps> = ({
           )}
         </button>
       </div>
-    </>
+    </div>
   );
 };

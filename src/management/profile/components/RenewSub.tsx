@@ -17,9 +17,9 @@ export const RenewSub: React.FC<RenewSubProps> = ({
   };
 
   return (
-    <>
+    <div className="subscription-card-component">
       <div 
-        className="text-center p-3 mb-4 subscription-alert" 
+        className="text-center p-3 mb-4 glasmorphism-effect"
         role="alert"
       >
         <h4 className="alert-heading">Cancelación Programada</h4>
@@ -30,7 +30,7 @@ export const RenewSub: React.FC<RenewSubProps> = ({
       </p>
       <div className="d-grid">
         <button
-          className="btn btn-success btn-lg"
+          className="neumorphism-button neumorphism-button-success"
           onClick={handleRenew}
           disabled={isRenewingSubscription}
         >
@@ -44,6 +44,6 @@ export const RenewSub: React.FC<RenewSubProps> = ({
           )}
         </button>
       </div>
-    </>
+    </div>
   );
 };

@@ -146,45 +146,36 @@ export const SubscriptionPage = () => {
   return (
     <>
       <Navbar />
-      <div className="profile-page-container">
-        <div className="container d-flex align-items-center justify-content-center" style={{ paddingTop: '5rem', paddingBottom: '5rem' }}>
-          <div className="row justify-content-center w-100">
-            <div className="col-md-8 col-lg-6">
-              <div className="shadow-sm subscription-card">
-                <div className="card-body p-4 p-md-5">
-                  <h1 className="card-title text-center mb-4">Gestionar Suscripción</h1>
-                  {
-                    !userRolesDefined ? (
-                      <div className="d-flex justify-content-center align-items-center loading-text-dark-theme" style={{ minHeight: '200px' }}>
-                        <div className="spinner-border" role="status">
-                          <span className="visually-hidden">Cargando datos de usuario...</span>
-                        </div>
-                      </div>
-                    ) : isPremiumUser ? (
-                      cancelAtPeriodEnd ? (
-                        <RenewSub
-                          startRenewingSubscription={async () => { await startRenewingSubscription(); }}
-                          isRenewingSubscription={isRenewingSubscription}
-                        />
-                      ) : (
-                        <CancelSub
-                          handleCancelSubscription={handleCancelSubscription}
-                          isCancelingSubscription={isCancelingSubscription}
-                          currentSubscriptionId={currentSubscriptionId}
-                          isPremiumUser={isPremiumUser}
-                        />
-                      )
-                    ) : (
-                      <GetSub
-                        handleSubscribe={handleSubscribe}
-                        isLoadingCheckout={isLoadingCheckout}
-                      />
-                    )
-                  }
+      <div className="sub-page-container">
+        <div className="card-sub-body"> 
+          {
+            !userRolesDefined ? (
+              <div className="d-flex justify-content-center align-items-center loading-text-dark-theme">
+                <div className="spinner-border" role="status">
+                  <span className="visually-hidden">Cargando datos de usuario...</span>
                 </div>
               </div>
-            </div>
-          </div>
+            ) : isPremiumUser ? (
+              cancelAtPeriodEnd ? (
+                <RenewSub
+                  startRenewingSubscription={async () => { await startRenewingSubscription(); }}
+                  isRenewingSubscription={isRenewingSubscription}
+                />
+              ) : (
+                <CancelSub
+                  handleCancelSubscription={handleCancelSubscription}
+                  isCancelingSubscription={isCancelingSubscription}
+                  currentSubscriptionId={currentSubscriptionId}
+                  isPremiumUser={isPremiumUser}
+                />
+              )
+            ) : (
+              <GetSub
+                handleSubscribe={handleSubscribe}
+                isLoadingCheckout={isLoadingCheckout}
+              />
+            )
+          }
         </div>
       </div>
     </>

@@ -1,4 +1,4 @@
-.profile-page-container {
+.sub-page-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -7,46 +7,182 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  margin-top: 28px;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  box-sizing: border-box;
 }
 
-.subscription-card {
-  background-color: rgb(35, 35, 35);
+.subscription-card-component {
+  max-width: 850px;
+  margin: 2rem;
+  background-color: rgba(30, 30, 30, 0.80);
   color: white;
-  border-radius: 1rem;
-  border: 1px solid #444;
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+  max-height: calc(100vh - 80px);
+  overflow-y: auto;
+  margin-top: 1.6rem;
 }
 
-.subscription-card .card-title {
+.glasmorphism-effect {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 6px 25px 0 rgba(0, 0, 0, 0.20);
+  padding: 20px;
+  margin-bottom: 25px;
   color: white;
 }
 
-.subscription-alert {
-  background-color: #2C3E50;
-  color: #f0f0f0;
-  border: 1px solid #444;
-  border-radius: 0.5rem;
+.glasmorphism-effect .card-title,
+.glasmorphism-effect .subtitle,
+.glasmorphism-effect .price-main,
+.glasmorphism-effect .price-sub,
+.glasmorphism-effect .price-desc {
+  color: #f5f5f5;
+  text-shadow: 0px 1px 4px rgba(0,0,0,0.4);
 }
 
-.subscription-alert hr {
-  border-color: #444;
+.glasmorphism-effect .card-title {
+  font-size: 2.3rem;
+  font-weight: bold;
 }
 
-.subscription-list-item {
-  background-color: transparent;
-  color: #f0f0f0;
-  border: none;
+.glasmorphism-effect .subtitle {
+  font-size: 1.1rem;
+  opacity: 0.9;
 }
 
-.text-light-emphasis {
-  color: #f0f0f0 !important;
+.subscription-header-gradient.glasmorphism-effect {
+  background-image: none;
+}
+
+.neumorphism-base {
+  background-color: #1e1e1e;
+}
+
+.neumorphism-sunken-container {
+  background-color: var(--neumorphism-bg, #1c1c1c);
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: inset 6px 6px 12px #141414,
+              inset -6px -6px 12px #242424;
+  margin-bottom: 25px;
+}
+
+.benefits-title-gradient {
+  font-weight: bold;
+  margin-bottom: 20px !important;
+  background: -webkit-linear-gradient(45deg, #00bfff, #00ffc3);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 1.6rem;
+}
+
+.neumorphism-raised-card {
+  background-color: var(--neumorphism-bg, #1c1c1c);
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 6px 6px 12px #141414,
+              -6px -6px 12px #242424;
+  transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+  text-align: center;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.neumorphism-raised-card .benefit-icon {
+  font-size: 2.5rem;
+  margin-bottom: 12px;
+  color: #00bfff;
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.neumorphism-raised-card span {
+  color: #e0e0e0;
+  font-size: 0.95rem;
+}
+
+.price-badge {
+  background-color: rgba(0, 123, 255, 0.85);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 6px;
+  margin-right: 10px;
+  margin-bottom: 5px;
+  display: inline-block;
+  box-shadow: 0 2px 8px rgba(0,100,255,0.35);
+  font-weight: 500;
+}
+
+.price-main {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.price-sub {
+  font-size: 0.8rem;
+  margin-left: 2px;
+  opacity: 0.85;
+}
+
+.price-desc {
+  font-size: 1rem;
+  margin-top: 6px;
+  opacity: 0.9;
 }
 
 .text-muted-dark-theme {
-  color: #adb5bd !important;
+  color: #999 !important;
 }
 
-.loading-text-dark-theme,
-.unauthenticated-text-dark-theme {
-  color: white;
+.neumorphism-button {
+  background-color: var(--neumorphism-bg, #1e1e1e);
+  color: #00bfff !important;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 25px;
+  font-weight: bold;
+  font-size: 1rem;
+  box-shadow: 5px 5px 10px #141414,
+              -5px -5px 10px #282828;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  outline: none;
+}
+
+.neumorphism-button:active {
+  box-shadow: inset 2px 2px 5px #141414,
+              inset -2px -2px 5px #282828;
+  font-size: 0.98rem;
+  color: #00dec3 !important;
+}
+
+.neumorphism-button:disabled {
+  opacity: 0.6;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.neumorphism-button-danger {
+  color: #ff4d4f !important;
+}
+
+.neumorphism-button-danger:active {
+  color: #f5222d !important;
+}
+
+.neumorphism-button-success {
+  color: #28a745 !important;
+}
+
+.neumorphism-button-success:active {
+  color: #1e7e34 !important;
 }
