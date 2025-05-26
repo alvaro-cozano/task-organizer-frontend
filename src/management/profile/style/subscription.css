@@ -20,7 +20,7 @@
   border-radius: 20px;
   padding: 25px;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
-  max-height: calc(100vh - 80px);
+  max-height: calc(100vh - 100px);
   overflow-y: auto;
   margin-top: 1.6rem;
 }

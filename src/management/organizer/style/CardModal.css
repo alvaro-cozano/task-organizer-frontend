@@ -421,9 +421,9 @@
     min-width: 0 !important;
     border-radius: 0 !important;
     padding: 15px !important;
-    max-height: 100vh !important;
+    max-height: calc(100vh - 4rem) !important;
     overflow-y: auto !important;
-    margin-top: 0 !important;
+    margin-top: 28px !important;
     border: none !important;
   }
 
