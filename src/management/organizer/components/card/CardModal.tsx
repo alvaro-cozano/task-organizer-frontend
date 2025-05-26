@@ -10,6 +10,7 @@ declare global {
 }
 
 import React, { useEffect, useState, useCallback } from 'react';
+import ReactDOM from 'react-dom';
 
 import { useParams } from 'react-router-dom';
 import Modal from 'react-modal';
@@ -57,8 +58,32 @@ function getProgress(card: CardDTO): number {
   return Math.round((completed / total) * 100);
 }
 
+const DatePickerPortal = ({ children }: { children: React.ReactNode }) => {
+  const el = document.getElementById('datepicker-portal');
+  if (!el) {
+    const newEl = document.createElement('div');
+    newEl.id = 'datepicker-portal';
+    document.body.appendChild(newEl);
+    return ReactDOM.createPortal(children, newEl);
+  }
+  return ReactDOM.createPortal(children, el);
+};
+
 const CardModal: React.FC<CardModalProps> = ({ isOpen, closeModal, card, statuses, forceRender }) => {
   const { boardId } = useParams<{ boardId: string }>();
+
+  const swalDarkModal = Swal.mixin({
+    customClass: {
+      popup: 'cardpage-swal-popup',
+      title: 'cardpage-swal-title',
+      htmlContainer: 'cardpage-swal-html-container',
+      confirmButton: 'cardpage-swal-confirm-button',
+      cancelButton: 'cardpage-swal-cancel-button',
+      input: 'cardpage-swal-input',
+    },
+    background: '#2a2a2a',
+    color: '#f0f0f0',
+  });
 
   const [formData, setFormData] = useState<CardDTO>({
     id: 0,
@@ -307,8 +332,21 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, closeModal, card, statuse
   }, [card, startDeletingCard, startLoadingCardsByBoardAndStatus, closeModal]);
 
   const handleAddChecklist = async () => {
-    const title = window.prompt("Introduce el nombre del nuevo checklist:");
-    if (!title || !formData.id) return;
+    const { value: title } = await swalDarkModal.fire({
+      title: 'Crear Nuevo Checklist',
+      input: 'text',
+      inputPlaceholder: 'Nombre del nuevo checklist',
+      showCancelButton: true,
+      confirmButtonText: 'Crear',
+      cancelButtonText: 'Cancelar',
+      inputValidator: (value) => {
+        if (!value || !value.trim()) {
+          return '¡El nombre no puede estar vacío!';
+        }
+      }
+    });
+
+    if (!title || !title.trim() || !formData.id) return;
     const newItem: ChecklistItemDTO = {
       id: 0,
       title,
@@ -327,18 +365,42 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, closeModal, card, statuse
 
   const handleDeleteChecklist = async (item: ChecklistItemDTO) => {
     if (!item.id) return;
-    if (window.confirm("¿Seguro que quieres eliminar este checklist?")) {
-      await startSavingChecklistItem(item.cardId, { ...item, completed: !item.completed });
+    const result = await swalDarkModal.fire({
+      title: '¿Eliminar checklist?',
+      text: `¿Seguro que quieres eliminar el checklist "${item.title}"?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    });
+
+    if (result.isConfirmed) {
       setFormData(prev => ({
         ...prev,
         checklistItems: prev.checklistItems?.filter(ci => ci.id !== item.id)
       }));
+      Swal.fire('Eliminado', 'El checklist ha sido eliminado (del frontend).', 'success');
     }
   };
 
   const handleAddSubItem = async (item: ChecklistItemDTO) => {
-    const content = window.prompt("Introduce el contenido del nuevo subelemento:");
-    if (!content || !item.id) return;
+    const { value: content } = await swalDarkModal.fire({
+      title: 'Crear Nuevo Subelemento',
+      input: 'text',
+      inputPlaceholder: 'Contenido del nuevo subelemento',
+      showCancelButton: true,
+      confirmButtonText: 'Crear',
+      cancelButtonText: 'Cancelar',
+      inputValidator: (value) => {
+        if (!value || !value.trim()) {
+          return '¡El contenido no puede estar vacío!';
+        }
+      }
+    });
+
+    if (!content || !content.trim() || !item.id) return;
     const newSubItem: ChecklistSubItemDTO = {
       id: 0,
       content,
@@ -649,6 +711,7 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, closeModal, card, statuse
                   maxTime={formData.endDate && formData.startDate && new Date(formData.startDate).toDateString() === new Date(formData.endDate).toDateString()
                     ? new Date(formData.endDate)
                     : new Date(0, 0, 0, 23, 59)}
+                  popperContainer={DatePickerPortal}
                 />
               </div>
               <div className="col-md-6">
@@ -668,6 +731,7 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, closeModal, card, statuse
                       ? new Date(formData.startDate)
                       : new Date(0, 0, 0, 0, 0)}
                   maxTime={new Date(0, 0, 0, 23, 59)}
+                  popperContainer={DatePickerPortal}
                 />
               </div>
             </div>
@@ -927,16 +991,48 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, closeModal, card, statuse
                 className="btn btn-outline-secondary"
                 onClick={async () => {
                   if (!formData.id) {
-                    window.alert("Debes guardar la tarjeta antes de adjuntar un enlace.");
+                    swalDarkModal.fire({
+                      title: 'Acción no permitida',
+                      text: 'Debes guardar la tarjeta antes de adjuntar un enlace.',
+                      icon: 'warning'
+                    });
                     return;
                   }
                   if (formData.attachedLinks) {
-                    setFormData(prev => ({ ...prev, attachedLinks: "" }));
-                    await startSavingCard({ ...formData, attachedLinks: "" });
-                    await startLoadingCardsByBoardAndStatus(formData.board_id, formData.status_id);
+                    const result = await swalDarkModal.fire({
+                      title: '¿Borrar enlace?',
+                      text: `¿Seguro que quieres borrar el enlace "${formData.attachedLinks}"?`,
+                      icon: 'warning',
+                      showCancelButton: true,
+                      confirmButtonText: 'Sí, borrar',
+                      cancelButtonText: 'Cancelar',
+                      confirmButtonColor: '#d33',
+                    });
+
+                    if (result.isConfirmed) {
+                      setFormData(prev => ({ ...prev, attachedLinks: "" }));
+                      await startSavingCard({ ...formData, attachedLinks: "" });
+                      await startLoadingCardsByBoardAndStatus(formData.board_id, formData.status_id);
+                    }
                   } else {
-                    const url = window.prompt("Introduce el enlace (debe empezar por https://):", "https://");
-                    if (url && url.startsWith("https://")) {
+                    const { value: url } = await swalDarkModal.fire({
+                      title: 'Adjuntar Nuevo Enlace',
+                      input: 'url',
+                      inputPlaceholder: 'https://ejemplo.com',
+                      showCancelButton: true,
+                      confirmButtonText: 'Adjuntar',
+                      cancelButtonText: 'Cancelar',
+                      inputValidator: (value) => {
+                        if (!value) {
+                          return '¡El enlace no puede estar vacío!';
+                        }
+                        if (!value.startsWith("https://") && !value.startsWith("http://")) {
+                          return 'El enlace debe empezar con http:// o https://';
+                        }
+                      }
+                    });
+
+                    if (url) {
                       setFormData(prev => ({ ...prev, attachedLinks: url }));
                       await startSavingCard({ ...formData, attachedLinks: url });
                       await startLoadingCardsByBoardAndStatus(formData.board_id, formData.status_id);

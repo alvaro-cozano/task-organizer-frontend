@@ -59,9 +59,6 @@ export const CardPage = () => {
   const hasLoadedCards = useRef<Set<number>>(new Set());
   const [showChat, setShowChat] = useState(false);
 
-  const [quickCreateStatusId, setQuickCreateStatusId] = useState<number | null>(null);
-  const [quickCreateTitle, setQuickCreateTitle] = useState('');
-
   const cardsByStatusRef = useRef(restCardStore.cardsByStatus);
 
   const columnsRef = useRef<HTMLDivElement>(null);
@@ -308,11 +305,13 @@ export const CardPage = () => {
     setSelectedCard(null);
   };
 
-  const handleQuickCreateCard = async (statusId: number) => {
-    if (!quickCreateTitle.trim()) return;
+  const handleQuickCreateCard = async (statusId: number, cardTitle: string) => {
+    if (!cardTitle.trim()) return;
+    if (isNaN(parsedBoardId)) return;
+
     await restCardStore.startSavingCard({
       id: 0,
-      cardTitle: quickCreateTitle.trim(),
+      cardTitle: cardTitle.trim(),
       description: '',
       startDate: new Date(),
       endDate: new Date(),
@@ -328,8 +327,6 @@ export const CardPage = () => {
       label: null,
     });
     await restCardStore.startLoadingCardsByBoardAndStatus(parsedBoardId, statusId);
-    setQuickCreateStatusId(null);
-    setQuickCreateTitle('');
   };
 
   const columnsWidth = columnsRef.current?.scrollWidth || 0;
@@ -451,11 +448,30 @@ export const CardPage = () => {
                           >
                             <div
                               className="cardpage-menu-item"
-                              onClick={e => {
+                              onClick={async e => {
                                 e.stopPropagation();
-                                setQuickCreateStatusId(statusId);
-                                setQuickCreateTitle('');
                                 setOpenMenuId(null);
+
+                                if (status.id === undefined) return;
+
+                                const { value: newCardTitle } = await swalDark.fire({
+                                  title: 'Crear nueva tarjeta',
+                                  input: 'text',
+                                  inputPlaceholder: 'Título de la nueva tarjeta',
+                                  showCancelButton: true,
+                                  confirmButtonText: 'Crear',
+                                  cancelButtonText: 'Cancelar',
+                                  inputValidator: (value) => {
+                                    if (!value || !value.trim()) {
+                                      return '¡El título no puede estar vacío!';
+                                    }
+                                  }
+                                });
+
+                                if (newCardTitle && newCardTitle.trim()) {
+                                  if (isNaN(parsedBoardId)) return;
+                                  await handleQuickCreateCard(status.id, newCardTitle.trim());
+                                }
                               }}
                             >
                               <AddCircleIcon className="cardpage-menu-item-icon" />
@@ -565,47 +581,6 @@ export const CardPage = () => {
             onClick={e => e.stopPropagation()}
           >
             <WebSocketChat boardId={parsedBoardId} onClose={() => setShowChat(false)} />
-          </div>
-        </div>
-      )}
-
-      {quickCreateStatusId !== null && (
-        <div
-          className="cardpage-quick-create-menu-float"
-          onClick={() => setQuickCreateStatusId(null)}
-        >
-          <div
-            className="cardpage-quick-create-menu"
-            onClick={e => e.stopPropagation()}
-          >
-            <label className="cardpage-quick-create-label">Título de la tarjeta</label>
-            <input
-              type="text"
-              placeholder="Título de la tarjeta"
-              value={quickCreateTitle}
-              autoFocus
-              onChange={e => setQuickCreateTitle(e.target.value)}
-              onKeyDown={e => {
-                if (e.key === 'Enter') handleQuickCreateCard(quickCreateStatusId!);
-                if (e.key === 'Escape') setQuickCreateStatusId(null);
-              }}
-              className="cardpage-quick-create-input"
-            />
-            <div className="cardpage-quick-create-btn-row">
-              <button
-                onClick={() => handleQuickCreateCard(quickCreateStatusId!)}
-                disabled={!quickCreateTitle.trim()}
-                className="cardpage-quick-create-btn-accept"
-              >
-                Aceptar
-              </button>
-              <button
-                onClick={() => setQuickCreateStatusId(null)}
-                className="cardpage-quick-create-btn-cancel"
-              >
-                Cancelar
-              </button>
-            </div>
           </div>
         </div>
       )}

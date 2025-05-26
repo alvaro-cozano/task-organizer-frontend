@@ -48,7 +48,7 @@ export const GetSub: React.FC<GetSubProps> = ({
 
       <div className="subscription-price-section d-flex flex-column flex-md-row align-items-center justify-content-center text-center text-md-start mb-4 glasmorphism-effect">
         <span className="price-badge me-md-3 mb-2 mb-md-0">
-          <span className="price-main">$5</span>
+          <span className="price-main">$1</span>
           <span className="price-sub">/mes</span>
         </span>
         <span className="price-desc">Sin permanencia. Cancela cuando quieras.</span>
