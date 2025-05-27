@@ -22,7 +22,7 @@ export const useWebSocketChat = (boardId: number) => {
 
   const { user } = useAuthStore() as { user: { id: number; username: string; email: string; profileImageBase64?: string } };
   const { profile } = useProfileStore();
-  const baseURL = springApi.defaults.baseURL || '';
+  const baseURL = import.meta.env.API_URL || '';
 
   useEffect(() => {
     springApi.get(`/api/chat/${boardId}/messages`)
