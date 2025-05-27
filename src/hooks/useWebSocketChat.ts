@@ -31,7 +31,7 @@ export const useWebSocketChat = (boardId: number) => {
       })
       .catch(() => setMessages([]));
 
-    const socket = new SockJS('/ws');
+    const socket = new SockJS(`${baseURL}/ws`);
     const client = Stomp.over(socket);
     (client as any).debug = () => {};
 
