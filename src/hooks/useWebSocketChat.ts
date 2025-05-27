@@ -4,6 +4,7 @@ import SockJS from 'sockjs-client/dist/sockjs';
 import Swal from 'sweetalert2';
 import { springApi } from '../api';
 import { useAuthStore, useProfileStore } from '../hooks';
+import { getEnvVariables } from '../helpers';
 
 interface ChatMessage {
   email: string;
@@ -22,7 +23,8 @@ export const useWebSocketChat = (boardId: number) => {
 
   const { user } = useAuthStore() as { user: { id: number; username: string; email: string; profileImageBase64?: string } };
   const { profile } = useProfileStore();
-  const baseURL = springApi.defaults.baseURL || '';
+  const { VITE_API_URL } = getEnvVariables();
+  const baseURL = VITE_API_URL;
 
   useEffect(() => {
     springApi.get(`/api/chat/${boardId}/messages`)
@@ -31,7 +33,7 @@ export const useWebSocketChat = (boardId: number) => {
       })
       .catch(() => setMessages([]));
 
-    const socket = new SockJS('/ws');
+    const socket = new SockJS(`${baseURL}/ws`);
     const client = Stomp.over(socket);
     (client as any).debug = () => {};
 
