@@ -2,7 +2,7 @@
 
 ### Prerequisitos
 
-- Instalar Node.js (https://nodejs.org/es)
+- Node.js ( https://nodejs.org/es )
 - Versión de java jdk-17
 
 ### Instalación
@@ -22,18 +22,12 @@
 3. Crea el .env
 
    ```sh
-   VITE_API_URL="http://localhost:8080"
+   VITE_API_URL=http://localhost:8080
    API_URL=http://localhost:5173
    ```
 
-4.  Ejecuta el proyecto
+4. Ejecuta el proyecto
 
    ```sh
    npm run dev
-   ```
-
-   - Base de datos local
-
-   ```sh
-   pnpm run start
    ```
