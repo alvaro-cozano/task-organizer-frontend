@@ -1,63 +1,39 @@
-Una vez realizado el GIT clone, ejecutar los siguientes comandos en la terminal
+## Para empezar
 
-# Dependencias de npm
+### Prerequisitos
 
-npm i
+- Instalar Node.js (https://nodejs.org/es)
+- Versión de java jdk-17
 
-# Dependencias de Bootstraps
+### Instalación
 
-npm i bootstrap@5.3.5
-npm i bootstrap-icons
+1. Clona el repositorio
 
-# Iconos
+   ```sh
+   git clone https://github.com/alvaro-cozano/taskor-react.git
+   ```
 
-npm i @mui/icons-material
+2. Instala los paquetes de NPM
 
-# Alertas
+   ```sh
+   npm install
+   ```
 
-npm i sweetalert2
+3. Crea el .env
 
-# Dependecias para funcionamiento del codigo
+   ```sh
+   VITE_API_URL="http://localhost:8080"
+   API_URL=http://localhost:5173
+   ```
 
-npm i react-router
-npm i @reduxjs/toolkit
-npm i react-redux
-npm i react-router-dom
-npm install react@latest react-dom@latest
+4.  Ejecuta el proyecto
 
-# Dependencias para conectar con springboot
+   ```sh
+   npm run dev
+   ```
 
-npm i axios
+   - Base de datos local
 
-# Dependencias para modales en react
-
-npm install react-modal
-
-# Dependencias para las fechas
-
-npm install date-fns
-npm i react-datepicker
-
-# Dependencias para autenticación con Google
-
-npm install @react-oauth/google
-
-# Dependencias para el calendario
-
-npm install react-big-calendar
-
-# Dependencias para mover componentes
-
-npm install gridstack
-
-npm install --save-dev @types/lodash
-
-# Dependencias websocket
-
-npm i sockjs
-npm i sockjs-client
-npm i react-stomp
-
-# Dependencias animaciones
-
-npm install framer-motion
+   ```sh
+   pnpm run start
+   ```
